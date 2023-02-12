@@ -3,12 +3,11 @@
 Minecraft java edition plugin. Made for spigot, compatible with spigot forks.
 Tested with spigot 1.19.3 and PaperMc 1.19.3
 
-//TODO: 
-attach resource pack, required for certain functionality
-fix profile command
-add practical functionality for /party and /guild commands
-make easier to use
-add sword blocking
+# Coming Soon
+resource pack upload, required for certain functionality
+profile command will be fixed
+practical functionality for /party and /guild commands
+sword blocking
 
 Build with Maven.
 
