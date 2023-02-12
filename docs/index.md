@@ -1,6 +1,7 @@
-HOW TO USE:
+# Documentation
 
-Commands:
+
+# Commands:
 
 /rpg
 Perm: [OP]
@@ -60,7 +61,7 @@ Used to create yml spell baseplate, does not fully work.
 Baseplates may cause errors.
 
 
-Other Perms:
+# Other Perms:
 
 rpgpl.*
 Default: [OP]
