@@ -1,0 +1,76 @@
+#this is the config file.
+#for "Another RPG Plugin"
+
+#Plugin dependencies:
+#-ArmorEquipEvent
+#-mythic keys plugin 1.4.1
+#-SpeechReceiver 2
+#-SkinsAPI
+
+#Customise  your MOTD here:
+motd-line1: '&fAnother Minecraft Server'
+motd-line2: '&b:)'
+
+# The number of Skill Points the player starts the game with.
+default-skill-points: 10
+
+# The default attribute value.
+default-ability-score-value: 10
+default-ability-score-modifier: 0
+
+# Experience required to reach each level,
+# This list displays total xp, not from last level.
+experience-per-level:
+- 0        #Lv1
+- 300
+- 900
+- 2700
+- 6500     #Lv5
+- 14000
+- 23000
+- 34000
+- 48000s
+- 64000    #Lv10
+- 85000
+- 100000
+- 120000
+- 140000
+- 165000   #Lv15
+- 195000
+- 225000
+- 265000
+- 305000
+- 355000   #Lv20
+
+#This table is for configuring the required level
+#for each proficiency bonus.
+proficiency-bonus-per-level:
+  lv1: 2
+  lv5: 3
+  lv9: 4
+  lv13: 5
+  lv17: 6
+
+ability-score-caps:
+  1: 15
+  2: 16
+  3: 16
+  4: 16
+  5: 18
+  10: 20
+  15: 25
+  20: 30
+
+teleport_locations:
+  close_bree:
+    format: '&f&l'
+    model_data: 1
+    name: 'Bree'
+    world: 'Flat'
+    x: 100
+    y: 64
+    z: 100
+    pitch: 0
+    yaw: 0
+    level: 5
+    intelligence: 10

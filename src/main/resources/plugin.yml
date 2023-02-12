@@ -1,0 +1,77 @@
+name: RpgPlugin
+version: '${project.version}'
+main: com.xpkitty.rpgplugin.Rpg
+api-version: 1.18
+authors: [ XpKitty ]
+description: Another RPG plugin
+depend: [ MythicKeysPlugin, SpeechReceiver, Vault ]
+website: xpkc.wordpress.com
+commands:
+  achievements:
+    description: View your achievements
+    aliases: [ achievement ]
+  experience:
+    description: Give and take EXP
+    aliases: [ exp, exper ]
+    permission: rpgpl.exp.modify
+    permission-message: You do not have permission to use this command!
+  getitem:
+    description: Get item
+    permission: rpgpl.give
+    permission-message: You do not have permission to use this command!
+  guild:
+    description: Create and manage guilds
+    aliases: [ g, guilds ]
+  house_points:
+    description: Give and take house points from players and hogwarts houses
+    aliases: [ house_point, housepoints, housepoint, hps, hp]
+  menu:
+    description: 'Opens the rpg menu'
+    aliases: [ rpgmenu ]
+  party:
+    description: 'Used to create party.'
+    aliases: [ p, group ]
+  profile:
+    description: Command for changing game profile
+    aliases: [ profiles, character, char ]
+  rpg:
+    description: Useful command for managin the plugin
+    permission: rpgpl.rpg
+    permission-message: You do not have permission to use this command!
+  setskill:
+    description: Sets skill value
+    permission: rpgpl.skill.set
+    permission-message: You do not have permission to use this command!
+  spell:
+    description: Manage, create and remove spells
+    permission: rpgpl.spell.modify
+    permission-message: You do not have permission to use this command
+permissions:
+  rpgpl.rpg:
+    default: op
+  rpgpl.give:
+    default: op
+  rpgpl.skill.set:
+    default: op
+  rpgpl.exp.modify:
+    default: op
+  rpgpl.*:
+    default: op
+  rpgpl.debug:
+    default: false
+  rpgpl.xpbar:
+    default: false
+  rpgpl.spell.modify:
+    default: op
+  rpgpl.points.*:
+    default: false
+  rpgpl.points.give.*:
+    default: false
+  rpgpl.points.take.*:
+    default: false
+  rpgpl.points.give.own:
+    default: false
+  rpgpl.points.take.own:
+    default: false
+  rpgpl.points.set:
+    default: false
