@@ -14,5 +14,5 @@ sword blocking
 # Author
 - [@XpKitty](https://www.github.com/XpKitty)
 
-## Documentation
-[Documentation (unfinished)] (https://github.com/XpKitty/RpgPlugin/blob/master/docs/index.md)
+## Documentation (unfinished)
+[Documentation] (https://github.com/XpKitty/RpgPlugin/blob/master/docs/index.md)
