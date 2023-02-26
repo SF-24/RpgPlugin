@@ -1,7 +1,7 @@
 name: RpgPlugin
 version: '${project.version}'
 main: com.xpkitty.rpgplugin.Rpg
-api-version: 1.18
+api-version: 1.19
 authors: [ XpKitty ]
 description: Another RPG plugin
 depend: [ MythicKeysPlugin, SpeechReceiver, Vault ]

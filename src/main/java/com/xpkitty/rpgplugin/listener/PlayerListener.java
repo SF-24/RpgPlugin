@@ -6,6 +6,7 @@ import com.xpkitty.rpgplugin.manager.AbilityScores;
 import com.xpkitty.rpgplugin.manager.MiscPlayerManager;
 import com.xpkitty.rpgplugin.manager.StringManager;
 import com.xpkitty.rpgplugin.manager.data.player_data.PlayerDataManager;
+import com.xpkitty.rpgplugin.manager.food.FoodContainer;
 import com.xpkitty.rpgplugin.manager.item.PlayerHand;
 import com.xpkitty.rpgplugin.manager.item.lightsaber.ExtendableWeaponManager;
 import com.xpkitty.rpgplugin.manager.item.lightsaber.LightsaberManager;
@@ -29,6 +30,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -50,9 +52,44 @@ public class PlayerListener implements Listener {
         this.rpg = rpg;
     }
 
+
+    // player eat event PlayerEatEvent
+
     @EventHandler
     public void onConsume(PlayerItemConsumeEvent e) {
         Player player = e.getPlayer();
+
+        if(e.getItem().getItemMeta()!=null) {
+            if(!e.isCancelled()) {
+                String locName = e.getItem().getItemMeta().getLocalizedName();
+                ItemStack dropItem = null;
+                FoodContainer container = null;
+                EquipmentSlot hand = e.getHand();
+
+                if(locName.contains("can")) {
+                    container=FoodContainer.CAN;
+                } else if(locName.contains("cup")) {
+                    container=FoodContainer.COFFEE_CUP;
+                } else if(locName.contains("paper_cup")) {
+                    container=FoodContainer.PAPER_CUP;
+                } else if(locName.contains("bowl")) {
+                    container=FoodContainer.BOWL;
+                } else if(locName.contains("coffee_cup")) {
+                    container=FoodContainer.COFFEE_CUP;
+                } else if(locName.contains("glass_mug")) {
+                    container=FoodContainer.GLASS_MUG;
+                }
+
+                if(container!=null) {
+                    dropItem=container.getItem();
+                }
+                if(hand.equals(EquipmentSlot.HAND)) {
+                    player.getInventory().setItemInMainHand(dropItem);
+                } else if(hand.equals(EquipmentSlot.OFF_HAND)) {
+                    player.getInventory().setItemInOffHand(dropItem);
+                }
+            }
+        }
 
         if(e.getItem().getType() == Material.POTION) {
             if (e.getItem().getItemMeta() != null) {

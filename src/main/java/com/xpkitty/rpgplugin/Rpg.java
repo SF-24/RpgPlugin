@@ -119,6 +119,7 @@ public final class Rpg extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new DeathAndRespawnListener(this),this);
         ArmorEquipEvent.registerListener(this);
 
+        getCommand("settings").setExecutor(new SettingsCommand(this));
         getCommand("menu").setExecutor(new MenuCommand(this));
         getCommand("getitem").setExecutor(new GetItemCommand(this));
         getCommand("setskill").setExecutor(new SetSkillCommand(this));
@@ -131,6 +132,7 @@ public final class Rpg extends JavaPlugin {
         getCommand("spell").setExecutor(new SpellCommand(this));
         getCommand("house_points").setExecutor(new HousePointCommand(this));
 
+        getCommand("settins").setTabCompleter(new SettingsTabCompleter());
         getCommand("getitem").setTabCompleter(new GetItemCommandTab());
         getCommand("setskill").setTabCompleter(new SetSkillCommandTab());
         getCommand("experience").setTabCompleter(new ExperienceCommandTabCompleter());
