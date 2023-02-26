@@ -132,7 +132,7 @@ public final class Rpg extends JavaPlugin {
         getCommand("spell").setExecutor(new SpellCommand(this));
         getCommand("house_points").setExecutor(new HousePointCommand(this));
 
-        getCommand("settins").setTabCompleter(new SettingsTabCompleter());
+        getCommand("settings").setTabCompleter(new SettingsTabCompleter());
         getCommand("getitem").setTabCompleter(new GetItemCommandTab());
         getCommand("setskill").setTabCompleter(new SetSkillCommandTab());
         getCommand("experience").setTabCompleter(new ExperienceCommandTabCompleter());
