@@ -4,7 +4,7 @@ main: com.xpkitty.rpgplugin.Rpg
 api-version: 1.19
 authors: [ XpKitty ]
 description: Another RPG plugin
-depend: [ MythicKeysPlugin, SpeechReceiver, Vault ]
+depend: [ MythicKeysPlugin,Vault,SpeechReceiver ]
 website: xpkc.wordpress.com
 commands:
   achievements:
@@ -46,6 +46,9 @@ commands:
     description: Manage, create and remove spells
     permission: rpgpl.spell.modify
     permission-message: You do not have permission to use this command
+  settings:
+    description: Change player settings
+    aliases: [ options, setting, option ]
 permissions:
   rpgpl.rpg:
     default: op

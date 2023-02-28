@@ -28,7 +28,7 @@ public class BlockBreakListener implements Listener {
                     e.setExpToDrop(5);
                     ItemStack item = new ItemStack(Material.NETHERITE_INGOT);
                     ItemMeta itemMeta = item.getItemMeta();
-                    itemMeta.setDisplayName(ChatColor.WHITE + "Endelhvir");
+                    itemMeta.setDisplayName(ChatColor.WHITE + "Edhelvir");
                     itemMeta.setCustomModelData(1);
                     item.setItemMeta(itemMeta);
 

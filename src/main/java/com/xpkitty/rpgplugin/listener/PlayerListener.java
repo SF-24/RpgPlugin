@@ -13,7 +13,6 @@ import com.xpkitty.rpgplugin.manager.item.lightsaber.LightsaberManager;
 import com.xpkitty.rpgplugin.manager.player_class.ArmourList;
 import com.xpkitty.rpgplugin.manager.skin.ArmourSkinManager;
 import com.xpkitty.rpgplugin.manager.skin.SkinChangeStatus;
-import com.xpkitty.rpgplugin.manager.skin.SkinManager;
 import com.xpkitty.rpgplugin.manager.skin.Trigger;
 import com.xpkitty.rpgplugin.manager.spells.spell_learning.SpellLearnManager;
 import com.xpkitty.rpgplugin.manager.spells.spell_ui.HotbarType;
@@ -36,10 +35,12 @@ import org.bukkit.inventory.meta.CrossbowMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Objects;
 
 public class PlayerListener implements Listener {
@@ -65,6 +66,7 @@ public class PlayerListener implements Listener {
                 ItemStack dropItem = null;
                 FoodContainer container = null;
                 EquipmentSlot hand = e.getHand();
+                locName=locName.toLowerCase(Locale.ROOT);
 
                 if(locName.contains("can")) {
                     container=FoodContainer.CAN;
@@ -81,13 +83,20 @@ public class PlayerListener implements Listener {
                 }
 
                 if(container!=null) {
-                    dropItem=container.getItem();
+                    dropItem = container.getItem();
+
+
+                    ItemStack finalDropItem = dropItem;
+                    rpg.getServer().getScheduler().runTaskLaterAsynchronously(rpg, () -> {
+                        player.sendMessage(String.valueOf(hand));
+                        if (hand.equals(EquipmentSlot.HAND)) {
+                            player.getInventory().setItemInMainHand(finalDropItem);
+                        } else if (hand.equals(EquipmentSlot.OFF_HAND)) {
+                            player.getInventory().setItemInOffHand(finalDropItem);
+                        }
+                    }, 1 / 40);
                 }
-                if(hand.equals(EquipmentSlot.HAND)) {
-                    player.getInventory().setItemInMainHand(dropItem);
-                } else if(hand.equals(EquipmentSlot.OFF_HAND)) {
-                    player.getInventory().setItemInOffHand(dropItem);
-                }
+
             }
         }
 
