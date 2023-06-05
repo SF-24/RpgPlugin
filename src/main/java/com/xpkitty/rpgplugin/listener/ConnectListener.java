@@ -1,19 +1,15 @@
 package com.xpkitty.rpgplugin.listener;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-import com.mojang.authlib.properties.PropertyMap;
 import com.xpkitty.rpgplugin.Rpg;
 import com.xpkitty.rpgplugin.manager.ExperienceManager;
 import com.xpkitty.rpgplugin.manager.MiscPlayerManager;
+import com.xpkitty.rpgplugin.manager.data.new_player_data.NewDataReader;
 import com.xpkitty.rpgplugin.manager.data.player_data.PlayerDataManager;
 import com.xpkitty.rpgplugin.manager.data.player_data.PlayerSkinFile;
 import com.xpkitty.rpgplugin.manager.data.player_data.PlayerSpellFile;
-import com.xpkitty.rpgplugin.manager.data.player_settings.settings_manager.SettingsManager;
 import com.xpkitty.rpgplugin.manager.data.profile_data.ProfileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -75,6 +71,9 @@ public class ConnectListener implements Listener {
 
         YamlConfiguration yamlConfiguration = getPlayerDataInstance(e.getPlayer()).getModifyYaml();
         File file = getPlayerDataInstance(e.getPlayer()).getYamlFile();
+
+        // make new data manager
+        NewDataReader newDataReader = new NewDataReader(e.getPlayer(),rpg);
 
 
         int exp = yamlConfiguration.getInt("experience");

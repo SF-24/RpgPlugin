@@ -2,11 +2,13 @@ package com.xpkitty.rpgplugin.manager;
 
 import com.xpkitty.rpgplugin.Rpg;
 import com.xpkitty.rpgplugin.listener.ConnectListener;
+import com.xpkitty.rpgplugin.manager.data.new_player_data.NewDataReader;
 import com.xpkitty.rpgplugin.manager.data.player_data.PlayerDataManager;
 import com.xpkitty.rpgplugin.manager.data.player_data.PlayerSpellFile;
 import com.xpkitty.rpgplugin.manager.data.spell_data.MainSpellData;
 import com.xpkitty.rpgplugin.manager.player_class.ClassList;
 import com.xpkitty.rpgplugin.manager.player_class.abilities.AbilityType;
+import com.xpkitty.rpgplugin.manager.skills.PlayerSkills;
 import com.xpkitty.rpgplugin.manager.spells.enum_list.HpSpellsList;
 import com.xpkitty.rpgplugin.manager.spells.spell_crafting.CustomSpellManager;
 import com.xpkitty.rpgplugin.manager.spells.spell_ui.SpellIcon;
@@ -39,6 +41,7 @@ public class UIManager {
         PlayerDataManager playerDataManager = connectListener.getPlayerDataInstance(player);
         YamlConfiguration modifyFile = playerDataManager.getModifyYaml();
 
+        // level, xp, skill point and attribute variables
         int level = modifyFile.getInt("level");
         int exp = modifyFile.getInt("experience");
         int skillPoints = modifyFile.getInt("skill_points");
@@ -68,6 +71,7 @@ public class UIManager {
         if(mWIS >= 0) {modWIS = "+" + mWIS;} else {modWIS= String.valueOf(mWIS);}
         if(mCHA >= 0) {modCHA = "+" + mCHA;} else {modCHA= String.valueOf(mCHA);}
 
+        // ui texture
         ItemStack menuItem = new ItemStack(Material.PEONY);
         ItemMeta menuItemMeta = menuItem.getItemMeta();
         menuItemMeta.setDisplayName(ChatColor.WHITE.toString());
@@ -82,6 +86,7 @@ public class UIManager {
         menuItemDown.setItemMeta(menuItemDownMeta);
         ui.setItem(8, menuItemDown);
 
+        // level item
         ItemStack levelItem = new ItemStack(Material.PEONY);
         ItemMeta levelItemMeta = levelItem.getItemMeta();
         levelItemMeta.setCustomModelData(10);
@@ -93,6 +98,7 @@ public class UIManager {
         levelItem.setItemMeta(levelItemMeta);
         ui.setItem(1, levelItem);
 
+        // ability scores item
         ItemStack abilityScoreItem = new ItemStack((Material.PLAYER_HEAD));
         SkullMeta abilityScoreItemMeta = (SkullMeta) abilityScoreItem.getItemMeta();
         abilityScoreItemMeta.setDisplayName(ChatColor.AQUA + "Ability Scores:");
@@ -113,30 +119,25 @@ public class UIManager {
         abilityScoreItem.setItemMeta(abilityScoreItemMeta);
         ui.setItem(2,abilityScoreItem);
 
-        Material classTexture = Material.WOODEN_HOE;
-        int classModelData = 0;
-        ArrayList<String> classLore = new ArrayList<>();
-        classLore.add(ChatColor.WHITE + "Click to open class menu");
+        // skills
+        ItemStack skills = new ItemStack(Material.IRON_SWORD);
+        ItemMeta skillMeta = skills.getItemMeta();
 
-        if(MiscPlayerManager.getPlayerClass(player,rpg) != null) {
-            classTexture = MiscPlayerManager.getPlayerClass(player,rpg).getTexture();
-            classModelData = MiscPlayerManager.getPlayerClass(player,rpg).getCustomModelData();
-            classLore.add(ChatColor.WHITE + "Selected class: " + MiscPlayerManager.getPlayerClass(player,rpg).getDisplay());
-        } else {
-            classLore.add(ChatColor.RED + "You have not selected a class");
+        skillMeta.setDisplayName(ChatColor.WHITE + "Skills");
+        skillMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+        ArrayList<String> lore = new ArrayList<>();
+
+        NewDataReader newDataReader = new NewDataReader(player,rpg);
+
+        for(PlayerSkills skill : newDataReader.loadData(rpg,player).getSkillMap().keySet()) {
+            lore.add(ChatColor.WHITE + skill.getName() + " " + newDataReader.getSkillLevel(player,skill));
         }
 
+        skills.setItemMeta(skillMeta);
+        ui.addItem(skills);
 
-        ItemStack classItem = new ItemStack(classTexture);
-        ItemMeta classItemMeta = classItem.getItemMeta();
-        classItemMeta.setDisplayName(ChatColor.AQUA + "Class Menu");
-        classItemMeta.setLore(classLore);
-        classItemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        classItemMeta.setCustomModelData(classModelData);
-        classItem.setItemMeta(classItemMeta);
-        ui.addItem(classItem);
-
-
+        // abilities
         ItemStack abilityItem = new ItemStack(Material.ENCHANTED_BOOK);
         ItemMeta abilityItemMeta = abilityItem.getItemMeta();
         abilityItemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + "Abilities");
@@ -146,7 +147,7 @@ public class UIManager {
         abilityItem.setItemMeta(abilityItemMeta);
         ui.addItem(abilityItem);
 
-
+        // spells
         ItemStack spellItem = new ItemStack(Material.WRITABLE_BOOK);
         ItemMeta spellItemMeta = spellItem.getItemMeta();
         spellItemMeta.setCustomModelData(1);

@@ -35,7 +35,7 @@ public class WandListener implements Listener {
         Player player = e.getPlayer();
 
         if(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
-            if(player.getInventory().getItemInMainHand().getType() != Material.AIR) {
+            if(player.getInventory().getItemInMainHand().getType() != Material.AIR && player.getInventory().getItemInMainHand().getItemMeta()!=null) {
                 if(player.getInventory().getItemInMainHand().getItemMeta().getLocalizedName().equalsIgnoreCase("wand")) {
                     SpellList spell;
                     if(player.isSneaking()) {

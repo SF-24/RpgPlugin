@@ -22,8 +22,6 @@ public class SpellChecker {
             if(spell.getWandMovement().equals(wandMovement)) {
                 isInEnum=true;
 
-                //player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a§l" + spell.getDisplay()));
-
                 for(SpellList element : SpellList.values()) {
                     if(element.name().equalsIgnoreCase(spell.name())) {
                         CastSpell.castSpell(player,element,rpg,newDir,true);

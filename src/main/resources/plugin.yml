@@ -4,7 +4,7 @@ main: com.xpkitty.rpgplugin.Rpg
 api-version: 1.19
 authors: [ XpKitty ]
 description: Another RPG plugin
-depend: [ MythicKeysPlugin,Vault,SpeechReceiver ]
+depend: [ MythicKeysPlugin ]
 website: xpkc.wordpress.com
 commands:
   achievements:

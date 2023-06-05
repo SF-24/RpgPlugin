@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class CustomSpellManager {
 
@@ -38,25 +39,28 @@ public class CustomSpellManager {
         }
     }
 
+    // cast a spell from YAML file
     public static void castCustomSpell(Rpg rpg, Player player, int castPower, int id) {
+        // variables
         YamlConfiguration yamlConfiguration = rpg.getMainSpellData().getModifyYaml();
         String name = yamlConfiguration.getString("spells." + id + ".name");
         String incantation = yamlConfiguration.getString("spells." + id + ".incantation");
 
-        //player.sendMessage(id + "|" + incantation + "|" + name);
-
-        //player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a§l" + incantation));
-
         HpSpellInstance instance = new HpSpellInstance(rpg, name, incantation, id);
 
+        // check for nearby players
         for (Player player2 : Bukkit.getOnlinePlayers()) {
-            if (player.getLocation().distance(player2.getLocation()) <= instance.getModifySpellFile().getInt("volume")) {
-                player2.sendMessage("<" + player.getDisplayName() + "> " + incantation);
+            if(player.getWorld().equals(player2.getWorld())) {
+                if (player.getLocation().distance(player2.getLocation()) <= instance.getModifySpellFile().getInt("volume")) {
+                    player2.sendMessage("<" + player.getDisplayName() + "> " + incantation);
+                }
             }
         }
 
+
         yamlConfiguration = instance.getModifySpellFile();
 
+        // check which spell is cast
         if (yamlConfiguration.contains("spell_name")) {
 
             SpellFunction function = SpellFunction.ENTITY_DAMAGE;
@@ -67,8 +71,8 @@ public class CustomSpellManager {
                     function = element;
                 }
             }
-            //player.sendMessage(f + "|" + function);
 
+            // calculate values
             float speed = (float) yamlConfiguration.getDouble("speed");
             int distance = yamlConfiguration.getInt("fly_distance");
             String val1 = yamlConfiguration.getString("val1");
@@ -93,12 +97,24 @@ public class CustomSpellManager {
 
             Color color = Color.fromRGB(r, g, b);
 
-            new CastSpellFromTemplate(rpg, player, castPower, function, speed, distance, st, val1, val2, val3, particle, color, size, count);
+            // get spell type
+            SpellType spellType = SpellType.BEAM;
+            if(yamlConfiguration.contains("spell-type")) {
+                spellType = SpellType.valueOf(yamlConfiguration.getString("spell-type").toUpperCase(Locale.ROOT));
+            }
+
+            if(function.equals(SpellFunction.SHIELD)) {
+                spellType=SpellType.SHIELD;
+            }
+
+            // cast spell from template
+            new CastSpellFromTemplate(rpg, player, castPower, function, speed, distance, st, val1, val2, val3, particle, color, size, count, spellType);
         } else {
             player.sendMessage("ERROR");
         }
     }
 
+    // get spell type from id
     public static String getSpellType(Rpg rpg, int id) {
         YamlConfiguration yamlConfiguration = rpg.getMainSpellData().getModifyYaml();
         String name = yamlConfiguration.getString("spells." + id + ".name");

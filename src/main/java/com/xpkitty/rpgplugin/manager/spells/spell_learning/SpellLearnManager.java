@@ -106,20 +106,22 @@ public class SpellLearnManager {
     }
 
 
-
+    // attempt casting a spell
     public static void attemptCast(Rpg rpg, Player player, String spell, boolean isHardCoded, List<Integer> wandMovement, Vector dir, boolean isQuickCasted) {
 
-
+        // get player spell file
         PlayerSpellFile playerSpellFile = rpg.getConnectListener().getPlayerSpellFile(player);
 
         boolean custom = !isHardCoded;
 
+        // if spell file exists
         if(playerSpellFile!=null) {
 
+            //get yaml configuration
             YamlConfiguration yamlConfiguration = playerSpellFile.getModifySpellFile();
-
             String path1 = "spells."+spell.toLowerCase(Locale.ROOT);
 
+            // if file does not contain spell
             // GENERATE SPELL DATA IN YAML SPELL DATA FILE FOR PLAYER
             if(!yamlConfiguration.contains(path1)) {
                 yamlConfiguration.createSection(path1);
@@ -193,9 +195,13 @@ public class SpellLearnManager {
             String incantation = "";
             String name = "";
             int spellDifficulty = 0;
+
+            // if is hard coded
             if(isHardCoded) {
                 for(HpSpellsList element : HpSpellsList.values()) {
                     if(element.getWandMovement().equals(wandMovement)) {
+
+                        // get values (variables)
                         spellDifficulty=element.getXpToLearn();
                         incantation=element.getDisplay();
                         name=element.getDescription();
@@ -203,6 +209,7 @@ public class SpellLearnManager {
                     }
                 }
             } else {
+                // if is not hard coded
                 MainSpellData mainSpellData = rpg.getMainSpellData();
                 YamlConfiguration mainSpellDataFile = mainSpellData.getModifyYaml();
 
@@ -227,8 +234,8 @@ public class SpellLearnManager {
             // Test for spell effect
             SpellCastType spellCastType = SpellCastType.FIZZLES;
 
+            // if cast roll is lower than difficulty
             if(castRoll<spellDifficulty) {
-
                 //SPELL FAILS
                 if(castRoll<spellDifficulty-10) {
                     spellCastType=SpellCastType.FAILS;
@@ -242,12 +249,12 @@ public class SpellLearnManager {
                 spellCastType=SpellCastType.SUCCESS;
             }
 
-
-
+            // IF SPELL PROGRESS IS >= SPELL DIFFICULTY
             if(currentSpellProgress>=spellDifficulty) {
                 spellCastType=SpellCastType.SUCCESS;
             }
 
+            // if req. energy >0
             if(requiredEnergy>0) {
                 if (requiredEnergy < EnergyManager.getEnergyCount(rpg, player)) {
                     spellCastType = SpellCastType.FAILS;
@@ -259,13 +266,13 @@ public class SpellLearnManager {
             // DEBUG LEARN SPELL
             System.out.println("");
             System.out.println("ATTEMPTING TO CAST SPELL:");
-            System.out.println("mana: " + requiredEnergy + " | " + playerSpellFile.getCurrentEnergy());
+            System.out.println("req. energy: " + requiredEnergy + " | " + playerSpellFile.getCurrentEnergy());
             System.out.println("original cast roll: " + originalCastRoll);
             System.out.println("cast roll: " + castRoll + " | " + spellDifficulty);
             System.out.println("");
 
 
-            // ELSE SPELL FIZZLES
+            // ELSE (if spell is not success) SPELL FIZZLES
 
 
 
@@ -402,6 +409,7 @@ public class SpellLearnManager {
                     }
 
                     // get spell difficulty
+                    // currently unused
                     learnDifficulty = yamlConfiguration.getInt(path+"exp.learn");
                 }
             }

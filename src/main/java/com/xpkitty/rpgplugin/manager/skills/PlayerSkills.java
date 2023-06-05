@@ -4,36 +4,39 @@ import com.xpkitty.rpgplugin.manager.AbilityScores;
 
 public enum PlayerSkills {
 
-    ATHLETICS(AbilityScores.STR, AbilityScores.CON),
+    ATHLETICS("Athletics", AbilityScores.STR, AbilityScores.CON),
 
-    ACROBATICS(AbilityScores.DEX, AbilityScores.DEX),
-    SLEIGH_OF_HAND(AbilityScores.DEX, AbilityScores.DEX),
-    STEALTH(AbilityScores.DEX, AbilityScores.DEX),
+    ACROBATICS("Acrobatics", AbilityScores.DEX, AbilityScores.DEX),
+    SLEIGH_OF_HAND("Sleight of hand", AbilityScores.DEX, AbilityScores.DEX),
+    STEALTH("Stealth", AbilityScores.DEX, AbilityScores.DEX),
 
-    HISTORY(AbilityScores.INT, AbilityScores.INT),
-    INVESTIGATION(AbilityScores.INT, AbilityScores.WIS),
-    NATURE(AbilityScores.INT, AbilityScores.WIS),
+    HISTORY("History", AbilityScores.INT, AbilityScores.INT),
+    INVESTIGATION("Investigation", AbilityScores.INT, AbilityScores.WIS),
+    NATURE("Nature", AbilityScores.INT, AbilityScores.WIS),
 
-    SPELL_CASTING(AbilityScores.INT, AbilityScores.WIS),
-    SPELL_CRAFTING(AbilityScores.INT, AbilityScores.WIS),
+    SPELL_CASTING("Spell casting", AbilityScores.INT, AbilityScores.WIS),
+    SPELL_CRAFTING("Spell crafting", AbilityScores.INT, AbilityScores.WIS),
 
-    ANIMAL_HANDLING(AbilityScores.WIS, AbilityScores.INT),
-    MEDICINE(AbilityScores.WIS, AbilityScores.INT),
+    ANIMAL_HANDLING("Animal handling", AbilityScores.WIS, AbilityScores.INT),
+    MEDICINE("Medicine", AbilityScores.WIS, AbilityScores.INT),
 
-    INSIGHT(AbilityScores.WIS, AbilityScores.CHA),
-    PERCEPTION(AbilityScores.WIS, AbilityScores.WIS),
+    INSIGHT("Insight", AbilityScores.WIS, AbilityScores.CHA),
+    PERCEPTION("Perception", AbilityScores.WIS, AbilityScores.WIS),
 
-    DECEPTION(AbilityScores.CHA, AbilityScores.WIS),
-    INTIMIDATION(AbilityScores.CHA, AbilityScores.CHA),
-    PERSUASION(AbilityScores.CHA, AbilityScores.CHA);
+    DECEPTION("Deception", AbilityScores.CHA, AbilityScores.WIS),
+    INTIMIDATION("Intimidation", AbilityScores.CHA, AbilityScores.CHA),
+    PERSUASION("Persuasion", AbilityScores.CHA, AbilityScores.CHA);
 
     final AbilityScores baseAbilityScore, secondaryAbilityScore;
+    private final String name;
 
-    PlayerSkills(AbilityScores baseAbilityScore, AbilityScores secondaryAbilityScore) {
+    PlayerSkills(String name, AbilityScores baseAbilityScore, AbilityScores secondaryAbilityScore) {
         this.baseAbilityScore=baseAbilityScore;
         this.secondaryAbilityScore=secondaryAbilityScore;
+        this.name=name;
     }
 
+    public String getName() { return name; }
     public AbilityScores getBaseAbilityScore() { return baseAbilityScore; }
     public AbilityScores getSecondaryAbilityScore() { return secondaryAbilityScore; }
 

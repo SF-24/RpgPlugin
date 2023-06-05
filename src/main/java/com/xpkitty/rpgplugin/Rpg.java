@@ -22,6 +22,7 @@ import com.xpkitty.rpgplugin.manager.player_groups.guilds.GuildConfig;
 import com.xpkitty.rpgplugin.manager.player_groups.guilds.GuildManager;
 import com.xpkitty.rpgplugin.manager.hud.EnergyManager;
 import com.xpkitty.rpgplugin.manager.hud.HudSender;
+import com.xpkitty.rpgplugin.manager.spells.shield.ShieldManager;
 import com.xpkitty.rpgplugin.manager.spells.spell_learning.SpellLearnManager;
 import com.xpkitty.rpgplugin.manager.spells.spell_ui.SpellHotbarManager;
 import org.bukkit.Bukkit;
@@ -37,7 +38,8 @@ import java.util.List;
 
 public final class Rpg extends JavaPlugin {
 
-    private SettingsManager settingsManager = new SettingsManager(this);
+    public ShieldManager shieldManager = new ShieldManager();
+    private final SettingsManager settingsManager = new SettingsManager(this);
     private ConfigManager configManager = new ConfigManager();
     ConnectListener connectListener;
     ClickListener clickListener;
@@ -115,7 +117,6 @@ public final class Rpg extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new WandListener(this),this);
         Bukkit.getPluginManager().registerEvents(new ServerListener(this), this);
         Bukkit.getPluginManager().registerEvents(new KeyListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new SpeechListener(this), this);
         Bukkit.getPluginManager().registerEvents(new DeathAndRespawnListener(this),this);
         ArmorEquipEvent.registerListener(this);
 
