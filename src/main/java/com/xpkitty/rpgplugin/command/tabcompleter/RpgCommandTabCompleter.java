@@ -40,15 +40,15 @@ public class RpgCommandTabCompleter implements TabCompleter {
             return StringUtil.copyPartialMatches(args[0], Arrays.asList("ability","energy","setname","set_ability_sneak_setting","set_hotbar_count_setting","set_lightsaber_right_click_eject_setting","skin","skins","playerskin","playerskins","ability_scores","hogwarts","setitemname","getitemname","getlocalizeditemname","setlocalizeditemname","setskin","setskillpoints"),new ArrayList<>());
         } else if(args.length==2 && args[1].equalsIgnoreCase("energy")) {
             return StringUtil.copyPartialMatches(args[1], Collections.singletonList("set"),new ArrayList<>());
-        } else if(args.length==2 && args[1].equalsIgnoreCase("ability_scores")) {
+        } else if(args.length==2 && args[0].equalsIgnoreCase("ability_scores")) {
             return StringUtil.copyPartialMatches(args[1], Collections.singletonList("set"),new ArrayList<>());
         } else if(args.length==2 && ((args[0].equalsIgnoreCase("skin") || args[0].equalsIgnoreCase("skins")) || args[0].equalsIgnoreCase("playerskin") || args[0].equalsIgnoreCase("playerskins"))) {
             return StringUtil.copyPartialMatches(args[1], Arrays.asList("list","create","set","load"),new ArrayList<>());
         } else if(args.length==3 && args[1].equalsIgnoreCase("load") && ((args[0].equalsIgnoreCase("skin") || args[0].equalsIgnoreCase("skins")) || args[0].equalsIgnoreCase("playerskin") || args[0].equalsIgnoreCase("playerskins"))) {
             return StringUtil.copyPartialMatches(args[2],skinsList,new ArrayList<>());
-        } else if(args.length==3 && args[1].equalsIgnoreCase("ability_scores")) {
+        } else if(args.length==3 && args[0].equalsIgnoreCase("ability_scores")) {
             return StringUtil.copyPartialMatches(args[2], Arrays.asList("STR","DEX","CON","INT","WIS","CHA"),new ArrayList<>());
-        } else if(args.length==2 && args[1].equalsIgnoreCase("ability")) {
+        } else if(args.length==2 && args[0].equalsIgnoreCase("ability")) {
             return StringUtil.copyPartialMatches(args[1], Arrays.asList("add","remove"), new ArrayList<>());
         } else if(args.length==2 && args[0].equalsIgnoreCase("hogwarts")) {
             return StringUtil.copyPartialMatches(args[1], Collections.singletonList("house"),new ArrayList<>());

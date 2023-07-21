@@ -65,16 +65,12 @@
             <url>https://hub.jeff-media.com/nexus/repository/jeff-media-public/</url>
         </repository>
         <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-        </repository>
-        <repository>
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
+            <id>aria-repo</id>
+            <url>https://www.asangarin.eu/repo/snapshots</url>
         </repository>
     </repositories>
 
@@ -100,8 +96,8 @@
         </dependency>
         <dependency>
             <groupId>eu.asangarin</groupId>
-            <artifactId>mythickeysplugin</artifactId>
-            <version>1.4.1</version>
+            <artifactId>arikeysplugin</artifactId>
+            <version>2.2</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

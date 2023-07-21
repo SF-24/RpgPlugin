@@ -2,11 +2,13 @@ package com.xpkitty.rpgplugin.manager.data.new_player_data;
 
 import com.google.gson.Gson;
 import com.xpkitty.rpgplugin.Rpg;
+import com.xpkitty.rpgplugin.manager.data.profile_data.ProfileManager;
 import com.xpkitty.rpgplugin.manager.skills.PlayerSkills;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.*;
+import java.util.Objects;
 import java.util.UUID;
 
 public class NewDataReader {
@@ -15,19 +17,20 @@ public class NewDataReader {
     public NewDataReader(Player player, Rpg rpg) {
         this.rpg = rpg;
 
+
         try {
-            initiateFile(player.getUniqueId() + ".json", rpg);
+            initiateFile(player.getUniqueId(), rpg);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void initiateFile(String name, Rpg rpg) throws Exception {
+    private void initiateFile(UUID uuid, Rpg rpg) throws Exception {
 
-        String path = "plugins" + File.separator + "rpg" + File.separator + "PlayerData";
+        String path = "plugins" + File.separator + "RpgPlugin" + File.separator + "Data" + File.separator + "PlayerData" + File.separator + rpg.getConnectListener().getPlayerProfileInstance(Objects.requireNonNull(Bukkit.getPlayer(uuid))).getActiveProfile();
         System.out.println("PATH: " + path);
 
-        File file = new File(path, name);
+        File file = new File(path, uuid +".json");
 
         if(!file.exists()) {
             makeNewFile(file);
@@ -38,7 +41,7 @@ public class NewDataReader {
     public static File getFile(Rpg rpg, Player player) {
         UUID id = player.getUniqueId();
 
-        String path = rpg.getDataFolder() + File.separator + "Data" + File.separator + "PlayerData";
+        String path = "plugins" + File.separator + "RpgPlugin" + File.separator + "Data" + File.separator + "PlayerData" + File.separator + ProfileManager.getUniqueProfileId(rpg,player);
         File file = new File(path,id + ".json");
 
         if(!file.exists()) {

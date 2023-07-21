@@ -17,7 +17,7 @@ public class PlayerSkillManager {
 
     public static int getPlayerSkillMod(Rpg rpg, Player player, PlayerSkills skill) {
         int level = getPlayerSkillLevel(rpg,player,skill);
-        int v = MiscPlayerManager.calculateAbilityScoreModifier(level)+10;
+        int v = MiscPlayerManager.calculateAbilityScoreModifier(level+10);
         return v;
     }
 }

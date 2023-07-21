@@ -6,8 +6,8 @@ import com.xpkitty.rpgplugin.manager.UIManager;
 import com.xpkitty.rpgplugin.manager.item.PlayerHand;
 import com.xpkitty.rpgplugin.manager.item.lightsaber.ExtendableWeaponManager;
 import com.xpkitty.rpgplugin.manager.item.lightsaber.LightsaberManager;
-import eu.asangarin.mythickeys.api.MythicKeyPressEvent;
-import eu.asangarin.mythickeys.api.MythicKeyReleaseEvent;
+import eu.asangarin.arikeys.api.AriKeyPressEvent;
+import eu.asangarin.arikeys.api.AriKeyReleaseEvent;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,7 +21,7 @@ public class KeyListener implements Listener {
     }
 
     @EventHandler
-    public void onKey(MythicKeyPressEvent e) {
+    public void onKey(AriKeyPressEvent e) {
         if(e.getId().equals(NamespacedKey.fromString("key:menu"))) {
             e.getPlayer().closeInventory();
             UIManager.openMenu(e.getPlayer(), rpg);
@@ -93,7 +93,7 @@ public class KeyListener implements Listener {
 
 
     @EventHandler
-    public void onKeyLetGo(MythicKeyReleaseEvent e) {
+    public void onKeyLetGo(AriKeyReleaseEvent e) {
         if(e.getId().equals(NamespacedKey.fromString("key:menu"))) {
             UIManager.openMenu(e.getPlayer(), rpg);
         } else if(e.getId().equals(NamespacedKey.fromString("key:ability_menu"))) {

@@ -396,6 +396,11 @@ public class RpgCommand implements CommandExecutor {
 
                 yamlConfiguration.set("skill_points",Integer.parseInt(args[1]));
                 player.sendMessage("You now have " + ChatColor.AQUA + args[1] + ChatColor.RESET + " skill points.");
+                try {
+                    yamlConfiguration.save(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
             } else if(args.length>=4 && args[0].equalsIgnoreCase("vector")) {
                 float x = Float.parseFloat(args[1]);

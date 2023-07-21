@@ -3,6 +3,7 @@ package com.xpkitty.rpgplugin.manager.spells.spell_template;
 import com.xpkitty.rpgplugin.Rpg;
 import com.xpkitty.rpgplugin.manager.AbilityScores;
 import com.xpkitty.rpgplugin.manager.MiscPlayerManager;
+import com.xpkitty.rpgplugin.manager.spells.shield.ShieldType;
 import com.xpkitty.rpgplugin.manager.spells.spell_elements.CustomParticle;
 import com.xpkitty.rpgplugin.manager.spells.spell_elements.SpellFunction;
 import com.xpkitty.rpgplugin.manager.spells.spell_elements.SpellTarget;
@@ -93,7 +94,7 @@ public class GenericSpellRunnable extends BukkitRunnable {
             t += 0.25;
 
             if(!flipped) {
-                dist += 0.25;
+                dist +=0.25;
             } else {
                 dist-=0.25;
             }
@@ -102,10 +103,12 @@ public class GenericSpellRunnable extends BukkitRunnable {
             double x = dir.getX() * dist;
             double y = dir.getY() * dist + 1.5;
             double z = dir.getZ() * dist;
+            if(t<0.4) {
+                player.sendMessage("DIR: " + dir);
+                player.sendMessage("DIST: " + dist);
+                player.sendMessage("XYZ: " + x + " " + y + " " + z);
+            }
             loc.add(x,y,z);
-
-            System.out.println(x + " " + y + " " + z);
-
 
 
 
@@ -180,7 +183,7 @@ public class GenericSpellRunnable extends BukkitRunnable {
                 //loc.getWorld().spawnParticle(Particle.FLAME,loc,0,0.2,0,0,5);
 
 
-
+                // if hits barrier block
             } else if(!loc.getBlock().getType().equals(Material.BARRIER)) {
 
                 Entity e = null;
@@ -197,6 +200,7 @@ public class GenericSpellRunnable extends BukkitRunnable {
                     }
                 }
 
+                // if found entity
                 if(foundEntity) {
                     double distance = 10;
                     UUID id = null;
@@ -230,8 +234,35 @@ public class GenericSpellRunnable extends BukkitRunnable {
                             affectsEntity=true;
                         }
 
+                        // test if entity has Protego shield or similar
+                        boolean isReflected = false;
+
+                        if(e instanceof Player) {
+                            Player target = (Player) e;
+                            if(rpg.shieldManager.playerHasShield(target.getUniqueId())) {
+                                target.sendMessage("You are shielded");
+
+                                int shieldHealth=rpg.shieldManager.getShieldHealth(target.getUniqueId());
+
+                                target.sendMessage("Shield hp: " + shieldHealth);
+                                target.sendMessage("Spell str: " + spellStrength);
+
+                                if(shieldHealth > spellStrength) {
+                                    rpg.shieldManager.damageShield(target,spellStrength);
+                                    if(rpg.shieldManager.getShield(player).getSpellFunction().equals(SpellFunction.SHIELD_REFLECT)) {
+                                        flipped=!flipped;
+                                        isReflected=true;
+                                    } else {
+                                        cancel();
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+
+
                         // SPELL EFFECT - TEST IF ENTITY IS TARGET
-                        if (affectsEntity && !isRun) {
+                        if (affectsEntity && !isRun && !isReflected) {
 
                             isRun=true;
                             this.cancel();

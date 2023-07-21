@@ -2,7 +2,8 @@ package com.xpkitty.rpgplugin.manager.spells.spell_elements;
 
 public enum SpellFunction {
 
-    SHIELD("shieldType","shieldTime","shieldProtection"),
+    SHIELD_REFLECT("shieldTime","shieldHealth","shieldProtection"),
+    SHIELD("shieldTime","shieldHealth","shieldProtection"),
     BLOCK_PLACE("blockType", "count", ""),
     EXPLOSION("explosionType", "explosionStrength", ""),
     ENTITY_DAMAGE("damage", "", ""),

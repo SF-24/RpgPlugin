@@ -102,7 +102,6 @@ public class CustomSpellManager {
             if(yamlConfiguration.contains("spell-type")) {
                 spellType = SpellType.valueOf(yamlConfiguration.getString("spell-type").toUpperCase(Locale.ROOT));
             }
-
             if(function.equals(SpellFunction.SHIELD)) {
                 spellType=SpellType.SHIELD;
             }

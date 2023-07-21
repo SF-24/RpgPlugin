@@ -256,7 +256,8 @@ public class SpellLearnManager {
 
             // if req. energy >0
             if(requiredEnergy>0) {
-                if (requiredEnergy < EnergyManager.getEnergyCount(rpg, player)) {
+                if (requiredEnergy > EnergyManager.getEnergyCount(rpg, player)) {
+                    player.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "Not enough energy to cast spell");
                     spellCastType = SpellCastType.FAILS;
                 }
                 EnergyManager.takeEnergy(rpg, player, requiredEnergy);
@@ -279,7 +280,10 @@ public class SpellLearnManager {
 
             // ON SPELL SUCCESS LEARN SPELL
             if(spellCastType.equals(SpellCastType.SUCCESS)) {
-                SpellChecker.CheckHpSpell(player,rpg,wandMovement,dir,castRoll);
+                int spellStrength = ((castRoll-spellDifficulty)/40)*spellDifficulty+1;
+                player.sendMessage("CSTR: " + spellStrength + " | CDIFF: " + spellDifficulty);
+                player.sendMessage("ROLL: " + originalCastRoll + " | ROLL WITH MOD: " + castRoll);
+                SpellChecker.CheckHpSpell(player,rpg,wandMovement,dir,spellStrength);
                 learnSpell(rpg,player,spell,incantation,name,wandMovement,isHardCoded);
                 return;
             }
@@ -435,19 +439,16 @@ public class SpellLearnManager {
 
         // Roll virtual dice and add modifiers
         int spellCastRoll = DiceRollManager.getSpellDiceRoll();
+        int originalRoll = spellCastRoll;
 
-
-        spellCastRoll+= primarySpellCastingMod*2 + secondarySpellCastingMod;
-
-
-        spellCastRoll+=spellLevel*3;
-
-
+        // add values to spell cast roll
+        spellCastRoll+= primarySpellCastingMod + secondarySpellCastingMod/2;
+        spellCastRoll+=spellLevel-1;
         spellCastRoll+=playerSpellCastingSkillMod;
 
-        int energyBonus = EnergyManager.getEnergyCount(rpg,player)-requiredEnergy;
+        int energyBonus = (EnergyManager.getEnergyCount(rpg,player)-requiredEnergy)/6;
         if(energyBonus>0) {
-            spellCastRoll+=energyBonus;
+            spellCastRoll+= energyBonus;
         } else if(energyBonus<0) {
             spellCastRoll-=energyBonus*2;
         }
@@ -477,16 +478,25 @@ public class SpellLearnManager {
         int addToLimit = learnedSpellResult.getMaxExp();
         gainedExp = random.nextInt(addToLimit+1-addToRand)+addToRand;
 
-
         // FIZZLE SPELL IF NOT SUCCESS
         if(!result.equals(SpellCastType.SUCCESS)) {
             fizzleSpell(rpg,player,spell,incantation,isHardCoded,result);
             return;
         }
 
-        if(spellCastRoll<15) spellCastRoll=15;
-
         // cast spell if cast is successful
+        int spellStrength = (spellCastRoll-castDifficulty)+1;
+        int newSpellStrength = (spellStrength/20)*castDifficulty+1;
+
+        // debug
+        if(player.hasPermission("rpgpl.debug")) {}
+        player.sendMessage("STR: " + spellStrength + " | NEW STR: " + newSpellStrength + " | CDIFF: " + castDifficulty);
+        player.sendMessage("ROLL: " + originalRoll + " | ROLL WITH MOD: " + spellCastRoll);
+        player.sendMessage("PR MOD: " + primarySpellCastingMod + " | SEC MOD: " + secondarySpellCastingMod);
+        player.sendMessage("SKILL MOD: " + playerSpellCastingSkillMod + " | SPELL LVL: " + spellLevel);
+        player.sendMessage("ENERGY BONUS: " + energyBonus + " | IS QUICK CASTED: " + isQuickCasted);
+
+        // check spell
         SpellChecker.CheckHpSpell(player,rpg,wandMovement,dir,spellCastRoll);
 
         // GIVE PLAYER SPELL EXP

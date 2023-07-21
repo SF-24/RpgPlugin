@@ -130,10 +130,15 @@ public class UIManager {
 
         NewDataReader newDataReader = new NewDataReader(player,rpg);
 
-        for(PlayerSkills skill : newDataReader.loadData(rpg,player).getSkillMap().keySet()) {
-            lore.add(ChatColor.WHITE + skill.getName() + " " + newDataReader.getSkillLevel(player,skill));
+        for(AbilityScores abilityScore : AbilityScores.values()) {
+            for(PlayerSkills skill : newDataReader.loadData(rpg,player).getSkillMap().keySet()) {
+                if (abilityScore.equals(skill.getBaseAbilityScore())) {
+                    lore.add(skill.getBaseAbilityScore().getColour() + skill.getName() + " " + skill.getBaseAbilityScore().getDarkerColour() + newDataReader.getSkillLevel(player, skill));
+                }
+            }
         }
 
+        skillMeta.setLore(lore);
         skills.setItemMeta(skillMeta);
         ui.addItem(skills);
 

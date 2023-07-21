@@ -21,6 +21,8 @@ public class CastSpellFromTemplate {
             }
         }
 
+        spellStrength/=2;
+
         if(spellType.equals(SpellType.BEAM)) {
             GenericSpellRunnable genericSpellRunnable = new GenericSpellRunnable(rpg, player, function, speed, distance, targets, val1, val2, val3, particle, spellStrength);
             genericSpellRunnable.start();
