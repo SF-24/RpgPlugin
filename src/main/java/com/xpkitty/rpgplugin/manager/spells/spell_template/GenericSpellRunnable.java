@@ -5,8 +5,6 @@ package com.xpkitty.rpgplugin.manager.spells.spell_template;
 import com.xpkitty.rpgplugin.Rpg;
 import com.xpkitty.rpgplugin.manager.AbilityScores;
 import com.xpkitty.rpgplugin.manager.MiscPlayerManager;
-import com.xpkitty.rpgplugin.manager.spells.SpellManager;
-import com.xpkitty.rpgplugin.manager.spells.shield.ShieldType;
 import com.xpkitty.rpgplugin.manager.spells.spell_elements.CustomParticle;
 import com.xpkitty.rpgplugin.manager.spells.spell_elements.SpellFunction;
 import com.xpkitty.rpgplugin.manager.spells.spell_elements.SpellTarget;
@@ -96,11 +94,14 @@ public class GenericSpellRunnable extends BukkitRunnable {
 
             t += 0.25;
 
+            // now unused code
+            // kept for now
             if(!flipped) {
                 dist +=0.25;
             } else {
                 dist-=0.25;
             }
+
             dist=t;
 
             double x = dir.getX() * dist;
@@ -361,7 +362,7 @@ public class GenericSpellRunnable extends BukkitRunnable {
                                         Item dropItem = target.getWorld().dropItem(target.getLocation().add(0, 1, 0), item);
                                         dropItem.setVelocity(dir);
 
-                                        if(handItem.hasItemMeta() && handItem.getItemMeta().hasLocalizedName() && handItem.getItemMeta().getLocalizedName().contains("HP_WAND") ) {
+                                        if(handItem.hasItemMeta() && Objects.requireNonNull(handItem.getItemMeta()).hasLocalizedName() && handItem.getItemMeta().getLocalizedName().contains("HP_WAND") ) {
                                             rpg.getSpellHotbarManager().deadctivateSpellHotbar(player);
                                         }
                                     }
@@ -380,7 +381,7 @@ public class GenericSpellRunnable extends BukkitRunnable {
                                 dir.multiply(dir);
                                 dir.multiply(Float.parseFloat(val1));
                                 dir.multiply(-1);
-                                if(val2=="true") {
+                                if(val2.equals("true")) {
                                     dir = dir.setY(0.25);
                                 }
                                 e.setVelocity(dir);
@@ -397,9 +398,8 @@ public class GenericSpellRunnable extends BukkitRunnable {
 
                                 for(PotionEffectType effectType : PotionEffectType.values()) {
                                     if(effectType.getName().equalsIgnoreCase(effect)) {
-                                        if(e instanceof LivingEntity) {
-                                            ((LivingEntity) e).addPotionEffect(new PotionEffect(effectType,effectLength,amplifier,true,false,true));
-                                        }
+                                        // e is already declared as living entity
+                                        ((LivingEntity) e).addPotionEffect(new PotionEffect(effectType,effectLength,amplifier,true,false,true));
                                     }
                                 }
 
