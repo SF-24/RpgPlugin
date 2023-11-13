@@ -6,6 +6,7 @@ import com.xpkitty.rpgplugin.Rpg;
 import com.xpkitty.rpgplugin.manager.item.GetItem;
 import com.xpkitty.rpgplugin.manager.item.lightsaber.LightsaberColour;
 import com.xpkitty.rpgplugin.manager.item.lightsaber.LightsaberList;
+import com.xpkitty.rpgplugin.manager.item.lightsaber.LightsaberManager;
 import com.xpkitty.rpgplugin.manager.spells.OldWand;
 import com.xpkitty.rpgplugin.manager.spells.enum_list.SpellList;
 import com.xpkitty.rpgplugin.manager.spells.wand.GetWand;
@@ -203,7 +204,15 @@ public class GetItemCommand implements CommandExecutor {
                     lore.add(ChatColor.DARK_GREEN + " " + damage + " Attack Damage");
                     lore.add(ChatColor.DARK_GREEN + " 1.75 Attack Speed");
 
+                    // set damageM
                     int damageM = damage-1;
+
+                    // Get lightsaber type
+                    LightsaberList lightsaberType= LightsaberManager.getLightsaberType(id);
+
+                    float attackSpeed = lightsaberType.getLightsaberType().getBaseSpeed();
+                    attackSpeed = -1*(4-attackSpeed);
+
 
                     saberMeta.setCustomModelData(id);
                     saberMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "damage", damageM, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));

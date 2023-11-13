@@ -4,6 +4,7 @@ package com.xpkitty.rpgplugin.listener;
 
 import com.xpkitty.rpgplugin.Rpg;
 import com.xpkitty.rpgplugin.manager.StringManager;
+import com.xpkitty.rpgplugin.manager.damage.DamageType;
 import com.xpkitty.rpgplugin.manager.item.lightsaber.ExtendableWeaponManager;
 import com.xpkitty.rpgplugin.manager.item.lightsaber.LightsaberManager;
 import com.xpkitty.rpgplugin.manager.player_class.abilities.AttackType;
@@ -35,10 +36,11 @@ public class DamageListener implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageByBlockEvent e) {
-        if (e.getCause()== EntityDamageEvent.DamageCause.CONTACT && e.getDamager().getType()==Material.CACTUS) {
+
+        if (e.getDamager() != null && (e.getCause()== EntityDamageEvent.DamageCause.CONTACT && e.getDamager().getType()==Material.CACTUS)) {
             if(e.getEntityType()== EntityType.CAT) {
                 e.getEntity().setGlowing(true);
-                e.getEntity().setSilent(true);
+                e.getEntity().getWorld().spawnParticle(Particle.WAX_OFF,e.getEntity().getLocation(),50);
             }
         }
     }
@@ -49,6 +51,7 @@ public class DamageListener implements Listener {
         if(e.getDamager() instanceof LivingEntity) {
             if (((LivingEntity) e.getDamager()).getEquipment() != null) {
                 ItemStack stack = ((LivingEntity) e.getDamager()).getEquipment().getItemInMainHand();
+                ItemStack offhand = ((LivingEntity) e.getDamager()).getEquipment().getItemInOffHand();
 
                 if(ExtendableWeaponManager.isExtendableWeapon(stack) && !ExtendableWeaponManager.isExtended(stack)) {
                     e.setDamage(1f);
@@ -56,6 +59,15 @@ public class DamageListener implements Listener {
                 if(LightsaberManager.isLightsaber(stack) && !LightsaberManager.isExtended(stack)) {
                     e.setDamage(1f);
                 }
+                if((LightsaberManager.isLightsaber(stack)) && (LightsaberManager.isExtended(stack))) {
+                    if(LightsaberManager.isLightsaber(offhand) && LightsaberManager.isExtended(offhand)) {
+                        if(e.getEntity() instanceof Player) {
+                            ((Player) e.getEntity()).swingOffHand();
+                        }
+                    }
+                }
+
+
             }
         }
 

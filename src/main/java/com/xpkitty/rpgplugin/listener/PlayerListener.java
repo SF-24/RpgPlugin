@@ -37,7 +37,6 @@ import org.bukkit.inventory.meta.CrossbowMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.util.Collections;
@@ -90,7 +89,7 @@ public class PlayerListener implements Listener {
 
                     ItemStack finalDropItem = dropItem;
                     rpg.getServer().getScheduler().runTaskLaterAsynchronously(rpg, () -> {
-                        player.sendMessage(String.valueOf(hand));
+                        //player.sendMessage(String.valueOf(hand));
                         if (hand.equals(EquipmentSlot.HAND)) {
                             player.getInventory().setItemInMainHand(finalDropItem);
                         } else if (hand.equals(EquipmentSlot.OFF_HAND)) {
@@ -113,39 +112,63 @@ public class PlayerListener implements Listener {
                         StringManager.sendAchievement(rpg, player, "DRINK_MIRUVOR", ChatColor.AQUA + "Miruvor");
 
                     }
-
-                    switch (e.getItem().getItemMeta().getLocalizedName()) {
-                        case "absorb_5h":
-                            if (player.getAbsorptionAmount() <= 5.0d) {
-                                player.setAbsorptionAmount(5.0d);
-
-                            }
-                        case "absorb_10h":
-                            if (player.getAbsorptionAmount() <= 10.0d) {
-                                player.setAbsorptionAmount(10.0d);
-
-                            }
-                        case "absorb_15h":
-                            if (player.getAbsorptionAmount() <= 15.0d) {
-                                player.setAbsorptionAmount(15.0d);
-
-                            }
-                        case "absorb_20h":
-                            if (player.getAbsorptionAmount() <= 20.0d) {
-                                player.setAbsorptionAmount(20.0d);
-
-                            }
-                        case "feed_20":
-                            if (player.getFoodLevel() <= 20.0d) {
-                                player.setFoodLevel(20);
-
-                            }
-                        case "heal":
-                            player.setHealth(player.getMaxHealth());
-                        default:
-                            return;
-                    }
                 }
+                switch (e.getItem().getItemMeta().getLocalizedName()) {
+                    case "absorb_2h":
+                        if (player.getAbsorptionAmount() <= 2.0d) {
+                            player.setAbsorptionAmount(2.0d);
+
+                        }
+                        break;
+                    case "absorb_4h":
+                        if (player.getAbsorptionAmount() <= 4.0d) {
+                            player.setAbsorptionAmount(4.0d);
+
+                        }
+                        break;
+                    case "absorb_5h":
+                        if (player.getAbsorptionAmount() <= 5.0d) {
+                            player.setAbsorptionAmount(5.0d);
+
+                        }
+                        break;
+                    case "absorb_6h":
+                        if (player.getAbsorptionAmount() <= 6.0d) {
+                            player.setAbsorptionAmount(6.0d);
+
+                        }
+                        break;
+                    case "absorb_10h":
+                        if (player.getAbsorptionAmount() <= 10.0d) {
+                            player.setAbsorptionAmount(10.0d);
+
+                        }
+                        break;
+                    case "absorb_15h":
+                        if (player.getAbsorptionAmount() <= 15.0d) {
+                            player.setAbsorptionAmount(15.0d);
+
+                        }
+                        break;
+                    case "absorb_20h":
+                        if (player.getAbsorptionAmount() <= 20.0d) {
+                            player.setAbsorptionAmount(20.0d);
+
+                        }
+                        break;
+                    case "feed_20":
+                        if (player.getFoodLevel() <= 20.0d) {
+                            player.setFoodLevel(20);
+
+                        }
+                        break;
+                    case "heal":
+                        player.setHealth(player.getMaxHealth());
+                        break;
+                    default:
+                        return;
+                }
+
             }
 
         } else if(e.getItem().getType() == Material.SUSPICIOUS_STEW) {

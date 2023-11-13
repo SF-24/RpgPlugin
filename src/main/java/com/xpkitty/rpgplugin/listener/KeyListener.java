@@ -80,7 +80,7 @@ public class KeyListener implements Listener {
             if (isLeft) {
                 if(player.getInventory().getItemInMainHand().getItemMeta()!=null) {
                     if(player.getInventory().getItemInMainHand().getItemMeta().getLocalizedName().contains("wand")) {
-
+                        //TODO
                     } else {
                         rpg.getClickManager().leftClick(player);
                     }

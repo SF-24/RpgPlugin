@@ -11,6 +11,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class LightsaberManager {
 
+    public static LightsaberList getLightsaberType(int modelData) {
+        for(LightsaberList element : LightsaberList.values()) {
+            if(element.getSheathedId()==modelData || element.getBlueId()==modelData || element.getGreenId()==modelData || element.getPurpleId()==modelData || element.getRedId()==modelData) {
+                return element;
+            }
+        }
+        return null;
+    }
+
     public static boolean isExtended(ItemStack item) {
         if(isLightsaber(item)) {
             for(LightsaberList lightsaberList : LightsaberList.values()) {

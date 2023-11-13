@@ -491,12 +491,13 @@ public class SpellLearnManager {
         int newSpellStrength = (spellStrength/20)*castDifficulty+1;
 
         // debug
-        if(player.hasPermission("rpgpl.debug")) {}
-        player.sendMessage("STR: " + spellStrength + " | NEW STR: " + newSpellStrength + " | CDIFF: " + castDifficulty);
-        player.sendMessage("ROLL: " + originalRoll + " | ROLL WITH MOD: " + spellCastRoll);
-        player.sendMessage("PR MOD: " + primarySpellCastingMod + " | SEC MOD: " + secondarySpellCastingMod);
-        player.sendMessage("SKILL MOD: " + playerSpellCastingSkillMod + " | SPELL LVL: " + spellLevel);
-        player.sendMessage("ENERGY BONUS: " + energyBonus + " | IS QUICK CASTED: " + isQuickCasted);
+        if(player.hasPermission("rpgpl.debug")) {
+            player.sendMessage("STR: " + spellStrength + " | NEW STR: " + newSpellStrength + " | CDIFF: " + castDifficulty);
+            player.sendMessage("ROLL: " + originalRoll + " | ROLL WITH MOD: " + spellCastRoll);
+            player.sendMessage("PR MOD: " + primarySpellCastingMod + " | SEC MOD: " + secondarySpellCastingMod);
+            player.sendMessage("SKILL MOD: " + playerSpellCastingSkillMod + " | SPELL LVL: " + spellLevel);
+            player.sendMessage("ENERGY BONUS: " + energyBonus + " | IS QUICK CASTED: " + isQuickCasted);
+        }
 
         // check spell
         SpellChecker.CheckHpSpell(player,rpg,wandMovement,dir,spellCastRoll);

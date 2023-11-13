@@ -5,6 +5,7 @@ package com.xpkitty.rpgplugin.manager.spells.spell_template;
 import com.xpkitty.rpgplugin.Rpg;
 import com.xpkitty.rpgplugin.manager.AbilityScores;
 import com.xpkitty.rpgplugin.manager.MiscPlayerManager;
+import com.xpkitty.rpgplugin.manager.spells.SpellManager;
 import com.xpkitty.rpgplugin.manager.spells.shield.ShieldType;
 import com.xpkitty.rpgplugin.manager.spells.spell_elements.CustomParticle;
 import com.xpkitty.rpgplugin.manager.spells.spell_elements.SpellFunction;
@@ -333,14 +334,14 @@ public class GenericSpellRunnable extends BukkitRunnable {
                                 int targetPower = roll+targetResist+mod;
                                 int casterPower = spellStrength+disarmStrengthBase;
 
-                                player.sendMessage( targetPower +" target?caster " + casterPower);
+                                if(player.hasPermission("rpgpl.debug")) {
+                                    player.sendMessage(targetPower + " target?caster " + casterPower);
 
-                                if(casterPower>targetPower) {
-                                    disarm=true;
+                                    if (casterPower > targetPower) {
+                                        disarm = true;
+                                    }
+                                    player.sendMessage("DISARM: " + disarm);
                                 }
-
-
-                                player.sendMessage("DISARM: " + disarm);
 
                                 if(target.getEquipment() != null && disarm) {
                                     ItemStack handItem = target.getEquipment().getItemInMainHand();
@@ -359,6 +360,10 @@ public class GenericSpellRunnable extends BukkitRunnable {
                                     if(handItem.getType()!=Material.AIR) {
                                         Item dropItem = target.getWorld().dropItem(target.getLocation().add(0, 1, 0), item);
                                         dropItem.setVelocity(dir);
+
+                                        if(handItem.hasItemMeta() && handItem.getItemMeta().hasLocalizedName() && handItem.getItemMeta().getLocalizedName().contains("HP_WAND") ) {
+                                            rpg.getSpellHotbarManager().deadctivateSpellHotbar(player);
+                                        }
                                     }
                                 }
 
@@ -368,7 +373,7 @@ public class GenericSpellRunnable extends BukkitRunnable {
                             }
 
 
-                            //ENTITY KNOCKBACK FUNCTION EG FLIPENDO
+                            //ENTITY KNOCKBACK FUNCTION EG. FLIPENDO
                             if(function.equals(SpellFunction.ENTITY_KNOCKBACK)) {
 
                                 dir=player.getLocation().getDirection().normalize();
