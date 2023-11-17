@@ -1,5 +1,22 @@
-// 2023. Author: S.Frynas (XpKitty), e-mail: sebastian.frynas@outlook.com, licence: GNU GPL v3
-
+/*
+ *     Copyright (C) 2023 Sebastian Frynas
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ *     Contact: sebastian.frynas@outlook.com
+ *
+ */
 package com.xpkitty.rpgplugin.manager.player_groups.guilds;
 
 import com.xpkitty.rpgplugin.Rpg;
@@ -31,6 +48,11 @@ public class GuildConfig {
 
         modifyConfig = YamlConfiguration.loadConfiguration(configFile);
 
+        if(!modifyConfig.contains("current-guild-id")) {
+            modifyConfig.createSection("current-guild-id");
+            modifyConfig.set("current-guild-id",0);
+        }
+
         if(!modifyConfig.contains("max-guilds-per-player")) {
             modifyConfig.createSection("max-guilds-per-player");
             modifyConfig.set("max-guilds-per-player",2);
@@ -38,6 +60,23 @@ public class GuildConfig {
 
         try { modifyConfig.save(configFile); }
         catch (IOException e) { e.printStackTrace(); }
+    }
+
+    public int getGuildNum(boolean increaseGuildNum) {
+        YamlConfiguration yamlConfiguration = getModifyConfig();
+
+        int guildNum = yamlConfiguration.getInt("current-guild-id");
+
+        if(increaseGuildNum) {
+            int newGuildNum = guildNum+1;
+
+            yamlConfiguration.set("current-guild-id", newGuildNum);
+        }
+
+
+        saveFile(yamlConfiguration,getConfigFile());
+
+        return guildNum;
     }
 
 

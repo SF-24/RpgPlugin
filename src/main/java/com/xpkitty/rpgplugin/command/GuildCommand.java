@@ -1,8 +1,26 @@
-// 2023. Author: S.Frynas (XpKitty), e-mail: sebastian.frynas@outlook.com, licence: GNU GPL v3
-
+/*
+ *     Copyright (C) 2023 Sebastian Frynas
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ *     Contact: sebastian.frynas@outlook.com
+ *
+ */
 package com.xpkitty.rpgplugin.command;
 
 import com.xpkitty.rpgplugin.Rpg;
+import com.xpkitty.rpgplugin.manager.data.guild_data.GuildDataReader;
 import com.xpkitty.rpgplugin.manager.player_groups.guilds.Guild;
 import com.xpkitty.rpgplugin.manager.player_groups.guilds.GuildManager;
 import org.bukkit.ChatColor;
@@ -38,44 +56,38 @@ public class GuildCommand implements CommandExecutor {
 
                 // SHOW LIST OF GUILDS
                 if(args[0].equalsIgnoreCase("list")) {
-                    ArrayList<String> guilds = GuildManager.getGuildNameList(rpg);
                     ArrayList<Integer> guildIds = GuildManager.getGuildList(rpg);
-                    if(guilds.equals(new ArrayList<>())) {
+
+
+                    if(guildIds.equals(new ArrayList<>())) {
                         player.sendMessage(ChatColor.RED + "No guilds currently exist");
-                    } else if(guilds.size() < 1) {
+                    } else if(guildIds.size() < 1) {
                         player.sendMessage(ChatColor.RED + "No guilds currently exist");
                     } else {
                         player.sendMessage(ChatColor.GOLD + "Listing Guilds");
 
                         for(Integer element : guildIds) {
-                            player.sendMessage( "[id: " + element + "] " + GuildManager.getGuildName(rpg,element));
+                            GuildDataReader guildDataReader = new GuildDataReader(rpg,element);
+                            String name = guildDataReader.loadData(rpg,element).getGuildName();
+
+                            player.sendMessage( "[id: " + element + "] " + name);
                         }
                     }
 
                 // OPEN GUILD MENU
                 } else if(args[0].equalsIgnoreCase("menu")) {
-                    // TODO
+                    player.sendMessage("Guild menu is on the //todo list");
+                    // TODO guild menu
+
 
                 // SHOW GUILD INFO
                 } else if(args[0].equalsIgnoreCase("info")) {
-                    ArrayList<Integer> guilds = GuildManager.getGuildsByPlayer(rpg, player);
+                    player.sendMessage("Guild info is on the //todo list");
+                    // TODO guild info
 
-                    if(guilds.size() >= 1) {
-                        player.sendMessage(ChatColor.GOLD + "Showing guilds you are a member of:");
-
-
-                        for(Integer element : guilds) {
-
-                            String rank = GuildManager.getPlayerRankInGuildAsString(rpg,player, element);
-                            String name = GuildManager.getGuildName(rpg,element);
-
-                            player.sendMessage(name + " [" + rank + "]");
-                        }
-                    } else {
-                        player.sendMessage(ChatColor.RED + "You are not a member of a guild");
-                    }
+                } else if(args[0].equalsIgnoreCase("join")) {
+                    player.sendMessage(ChatColor.RED + "syntax: /guild join <guildId>");
                 }
-
                 // ARGS >1
             } else {
                  if(args[0].equalsIgnoreCase("create")) {
@@ -100,7 +112,13 @@ public class GuildCommand implements CommandExecutor {
                      } else {
                          player.sendMessage(ChatColor.RED + "You have reached limit of guilds you can be in at once (" + rpg.getGuildConfig().getMaxGuildsPerPlayer() + " guilds)");
                      }
+
+
                  } else if(args[0].equalsIgnoreCase("join")) {
+                    player.sendMessage("COMING SOON!");
+                    //TODO guild joining
+
+                    /*
                     StringBuilder guildName = new StringBuilder("na/e");
 
                     for(String arg : args) {
@@ -128,20 +146,22 @@ public class GuildCommand implements CommandExecutor {
 
                     } else {
                         player.sendMessage(ChatColor.RED + "Please specify guild name");
-                    }
+                    }*/
 
 
                     //GUILD INFO ABOUT CERTAIN GUILD BY ID
                  } else if(args[0].equalsIgnoreCase("info")) {
+                     player.sendMessage("COMING SOON!");
+
                      int id = -1;
 
                      try {
                          id = Integer.parseInt(args[1]);
                      } catch (Exception e) {
-                         player.sendMessage(ChatColor.RED + "Usage: /info <guild id>");
+                         player.sendMessage(ChatColor.RED + "Usage: /guild info <guild id>");
                      }
 
-
+                     /*
                      if(id>-1) {
                          int playerGuildCount = GuildManager.getPlayerGuildCount(rpg, player);
                          int maxGuildCount = rpg.getGuildConfig().getMaxGuildsPerPlayer();
@@ -166,7 +186,7 @@ public class GuildCommand implements CommandExecutor {
                          } else {
                              player.sendMessage(ChatColor.RED + "You can only be in " + maxGuildCount + " guilds at once");
                          }
-                     }
+                     }*/
                  }
             }
         }

@@ -1,5 +1,22 @@
-// 2023. Author: S.Frynas (XpKitty), e-mail: sebastian.frynas@outlook.com, licence: GNU GPL v3
-
+/*
+ *     Copyright (C) 2023 Sebastian Frynas
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ *     Contact: sebastian.frynas@outlook.com
+ *
+ */
 package com.xpkitty.rpgplugin;
 
 import com.jeff_media.armorequipevent.ArmorEquipEvent;
@@ -10,7 +27,6 @@ import com.xpkitty.rpgplugin.listener.*;
 import com.xpkitty.rpgplugin.manager.MiscPlayerManager;
 import com.xpkitty.rpgplugin.manager.PlayerLevelManager;
 import com.xpkitty.rpgplugin.manager.data.ConfigManager;
-import com.xpkitty.rpgplugin.manager.data.GuildDataManager;
 import com.xpkitty.rpgplugin.manager.data.HogwartsDataManager;
 import com.xpkitty.rpgplugin.manager.data.database_data.DatabaseConfigManager;
 import com.xpkitty.rpgplugin.manager.data.database_data.DatabaseManager;
@@ -18,12 +34,12 @@ import com.xpkitty.rpgplugin.manager.data.player_settings.settings_manager.Setti
 import com.xpkitty.rpgplugin.manager.data.spell_data.MainSpellData;
 import com.xpkitty.rpgplugin.manager.hogwarts.HogwartsHouseManager;
 import com.xpkitty.rpgplugin.manager.hogwarts.HogwartsHouseMathManager;
+import com.xpkitty.rpgplugin.manager.hud.EnergyManager;
+import com.xpkitty.rpgplugin.manager.hud.HudSender;
 import com.xpkitty.rpgplugin.manager.hud.HudType;
 import com.xpkitty.rpgplugin.manager.player_class.abilities.ClickManager;
 import com.xpkitty.rpgplugin.manager.player_groups.guilds.GuildConfig;
 import com.xpkitty.rpgplugin.manager.player_groups.guilds.GuildManager;
-import com.xpkitty.rpgplugin.manager.hud.EnergyManager;
-import com.xpkitty.rpgplugin.manager.hud.HudSender;
 import com.xpkitty.rpgplugin.manager.spells.shield.ShieldManager;
 import com.xpkitty.rpgplugin.manager.spells.spell_learning.SpellLearnManager;
 import com.xpkitty.rpgplugin.manager.spells.spell_ui.SpellHotbarManager;
@@ -51,7 +67,7 @@ public final class Rpg extends JavaPlugin {
     ClickManager clickManager = new ClickManager(this);
     GuildManager guildManager = new GuildManager(this);
     GuildConfig guildConfig = new GuildConfig(this);
-    GuildDataManager guildDataManager = new GuildDataManager(this);
+    // GuildDataManager guildDataManager = new GuildDataManager(this);
     HogwartsDataManager hogwartsDataManager = new HogwartsDataManager(this);
     DatabaseConfigManager databaseConfigManager = new DatabaseConfigManager(this);
     DatabaseManager databaseManager;
@@ -190,7 +206,8 @@ public final class Rpg extends JavaPlugin {
     public HogwartsDataManager getHogwartsDataManager() { return hogwartsDataManager; }
 
     public GuildConfig getGuildConfig() { return guildConfig; }
-    public GuildDataManager getGuildDataManager() { return guildDataManager; }
+
+    //public GuildDataManager getGuildDataManager() { return guildDataManager; }
     public GuildManager getGuildManager() { return guildManager; }
 
     public DatabaseManager getDatabaseManager() {return databaseManager;}

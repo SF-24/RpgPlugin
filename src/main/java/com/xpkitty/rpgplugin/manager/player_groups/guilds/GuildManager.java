@@ -1,54 +1,105 @@
-// 2023. Author: S.Frynas (XpKitty), e-mail: sebastian.frynas@outlook.com, licence: GNU GPL v3
-
+/*
+ *     Copyright (C) 2023 Sebastian Frynas
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ *     Contact: sebastian.frynas@outlook.com
+ *
+ */
 package com.xpkitty.rpgplugin.manager.player_groups.guilds;
 
 import com.xpkitty.rpgplugin.Rpg;
-import com.xpkitty.rpgplugin.manager.data.profile_data.ProfileManager;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration;
+import com.xpkitty.rpgplugin.manager.data.guild_data.GuildDataReader;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.logging.Level;
 
 public class GuildManager {
     Rpg rpg;
 
-    public HashMap<Integer, Guild> guilds = new HashMap<>();
+    public GuildManager(Rpg rpg) { this.rpg = rpg; }
 
-    public GuildManager(Rpg rpg) {
-        this.rpg = rpg;
-    }
 
     public void loadGuilds() {
         System.out.println("[AnotherRpgPlugin] Loading guilds:");
-
-        for(Integer element : GuildManager.getGuildList(rpg)) {
-            Guild guild = new Guild(rpg, GuildManager.getGuildName(rpg, element), element);
-            guilds.put(element, guild);
-
-            System.out.println("[AnotherRpgPlugin] Loaded guild of id " + element);
+        for(int guild : GuildManager.getGuildList(rpg)) {
+            loadGuild(guild);
         }
     }
 
     public void loadGuild(Integer id) {
-        Guild guild = new Guild(rpg, GuildManager.getGuildName(rpg, id), id);
-        guilds.put(id, guild);
-
-        System.out.println("[AnotherRpgPlugin] Loaded new guild of id " + id);
-
+        GuildDataReader guildDataReader = new GuildDataReader(rpg,id);
+        System.out.println("[RpgPlugin] Guild " + id + " has been loaded");
     }
-
+/*
     public Guild getGuildInstance(Integer id) {
-        if(guilds.containsKey(id)) {
+        if (guilds.containsKey(id)) {
             return guilds.get(id);
         }
         return null;
     }
-
+*/
     public static void createGuild(Rpg rpg, Player player, String name) {
-        int id = rpg.getGuildDataManager().getGuildNum(true);
+        int id = rpg.getGuildConfig().getGuildNum(true);
 
+        GuildDataReader guildDataReader = new GuildDataReader(rpg, id);
+        guildDataReader.setup(id, name, player.getUniqueId());
+
+    }
+
+    public static ArrayList<Integer> getGuildList(Rpg rpg) {
+        ArrayList<Integer> guilds = new ArrayList<>();
+
+        File dir = new File(GuildDataReader.getPath());
+        if(!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        File[] fileList = dir.listFiles();
+
+        if(fileList==null) {
+            Bukkit.getLogger().log(Level.WARNING, "[RpgPlugin] ERROR in GuildManager.java line: 200 - could not list files of directory");
+            return new ArrayList<>();
+        }
+
+        for(File file : fileList) {
+            guilds.add(Integer.valueOf(trimFileExtension(file.getName())));
+        }
+        return guilds;
+    }
+
+
+    public static int getPlayerGuildCount(Rpg rpg, Player player) {
+        return 0;
+    }
+
+    public static String trimFileExtension(String str) {
+        return str.substring(0, str.lastIndexOf('.'));
+    }
+}
+
+
+
+
+
+
+
+        /*
+        int id = rpg.getGuildDataManager().getGuildNum(true);
         player.sendMessage("Created new guild: " + ChatColor.AQUA + name +ChatColor.RESET + " with id of " + id);
 
         YamlConfiguration yamlConfiguration = rpg.getGuildDataManager().getModifyYaml();
@@ -71,8 +122,10 @@ public class GuildManager {
         rpg.getGuildDataManager().saveFile(yamlConfiguration,rpg.getGuildDataManager().getYamlFile());
 
         rpg.getGuildManager().loadGuild(id);
-    }
+    */
 
+
+/*
     public static ArrayList<Integer> getGuildsByPlayer(Rpg rpg, Player player) {
         YamlConfiguration yamlConfiguration = rpg.getGuildDataManager().getModifyYaml();
 
@@ -134,6 +187,7 @@ public class GuildManager {
         return name;
     }
 
+
     public static int getPlayerGuildCount(Rpg rpg, Player player) {
         YamlConfiguration yamlConfiguration = rpg.getGuildDataManager().getModifyYaml();
         int count = 0;
@@ -156,20 +210,7 @@ public class GuildManager {
         }
 
         return -1;
-    }
-
-    public static ArrayList<Integer> getGuildList(Rpg rpg) {
-        YamlConfiguration yamlConfiguration = rpg.getGuildDataManager().getModifyYaml();
-
-        ArrayList<Integer> guilds = new ArrayList<>();
-
-        for(String key : yamlConfiguration.getConfigurationSection("guilds").getKeys(false)) {
-            guilds.add(Integer.valueOf(key));
-
-        }
-
-        return guilds;
-    }
+    }/*
 
     public static ArrayList<String> getGuildNameList(Rpg rpg) {
         YamlConfiguration yamlConfiguration = rpg.getGuildDataManager().getModifyYaml();
@@ -183,4 +224,4 @@ public class GuildManager {
 
         return guilds;
     }
-}
+}*/
