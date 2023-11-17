@@ -3,22 +3,22 @@
 
 # Commands:
 
-/rpg\n
+/rpg
 Perm: [OP]
 rpgpl.rpg
 
-/getitem\n
+/getitem
 Perm: [OP]
 rpgpl.give
 Used to get items
 
-/experience\n
-Alias: /exp\n
+/experience
+Alias: /exp
 Perm: [OP]
 rpgpl.exp.modify
 Used to modify EXPERIENCE amount
 
-/menu\n
+/menu
 Perm: [ALL]
 Use to open character menu
 
@@ -26,8 +26,8 @@ Use to open character menu
 Perm: [ALL/OP]
 Use to view achievement menu. Currently unfinished
 
-/housepoints\n
-Aliases: /hp\n
+/housepoints
+Aliases: /hp
 Perms: [ALL]
 rpgpl.points.*
 rpgpl.points.give.*
@@ -37,26 +37,26 @@ rpgpl.points.take.own
 rpgpl.points.set
 Requires op for certail functionality
 
-/party\n
-Aliases: /p /group\n
+/party
+Aliases: /p /group
 Perms: [ALL]
 
-/setskill\n
+/setskill
 Perms: [OP]
 rpgpl.skill.set
 
-/guild\n
-Alias: /g\n
+/guild
+Alias: /g
 Perms: [ALL]
 
-/profile\n
-Alias: /char /character /profiles\n
+/profile
+Alias: /char /character /profiles
 Perms: [ALL]
 Used to add, remove, modify profiles\n
 WARNING: Does not fully work. Use at your own risk
 
-/spell\n
-Perms: [OP]\n
+/spell
+Perms: [OP]
 Used to create yml spell baseplate, does not fully work.
 Baseplates may cause errors.
 
