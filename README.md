@@ -6,10 +6,12 @@ Tested with spigot 1.19.3 and PaperMc 1.19.3
 Build with Maven.
 
 # Coming Soon
-resource pack upload, required for certain functionality
-profile command will be fixed
-practical functionality for /party and /guild commands
-sword blocking
+resource pack upload, required for certain functionality,
+profile command will be fixed,
+practical functionality for /party and /guild commands,
+sword blocking,
+dungeons,
+moving from YAML towards JSON file format
 
 # Author
 - [@XpKitty](https://www.github.com/XpKitty)
