@@ -22,7 +22,7 @@ Used to modify EXPERIENCE amount
 Perm: [ALL]
 Use to open character menu
 
-/achievements\n
+/achievements
 Perm: [ALL/OP]
 Use to view achievement menu. Currently unfinished
 
