@@ -52,7 +52,7 @@ Perms: [ALL]
 /profile
 Alias: /char /character /profiles
 Perms: [ALL]
-Used to add, remove, modify profiles
+Used to add, remove, modify profiles\n
 WARNING: Does not fully work. Use at your own risk
 
 /spell
