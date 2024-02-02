@@ -31,6 +31,10 @@ commands:
   party:
     description: 'Used to create party.'
     aliases: [ p, group ]
+  player_model:
+    description: 'Modify player model'
+    aliases: [ model, player_part, playerpart, part, pmodel]
+    permission: rpgpl.model
   profile:
     description: Command for changing game profile
     aliases: [ profiles, character, char ]
@@ -78,3 +82,5 @@ permissions:
     default: false
   rpgpl.points.set:
     default: false
+  rpgpl.model:
+    default: op

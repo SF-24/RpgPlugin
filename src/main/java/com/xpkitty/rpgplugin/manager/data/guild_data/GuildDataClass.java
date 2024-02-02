@@ -20,6 +20,10 @@
 
 package com.xpkitty.rpgplugin.manager.data.guild_data;
 
+import com.xpkitty.rpgplugin.manager.player_groups.guilds.ui.GuildBanner;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -27,9 +31,17 @@ public class GuildDataClass {
 
     int guildId;
     String guildName;
+
     UUID guildOwner;
     HashMap<UUID, GuildRank> members = new HashMap<>();
+
+    int guildLevel = 1;
+    int guildXp = 0;
+
+    GuildBanner banner = new GuildBanner();
+
     boolean isSetup = false;
+
 
     public void setupGuild(int id, String name, UUID owner) {
         guildId = id;
@@ -37,6 +49,18 @@ public class GuildDataClass {
         guildOwner = owner;
         members.put(owner,GuildRank.GUILDMASTER);
         isSetup = true;
+    }
+
+    public GuildBanner getBanner() {
+        return banner;
+    }
+
+    public boolean setBanner(Material material) {
+        return banner.setBanner(material);
+    }
+
+    public boolean setBanner(ItemStack itemStack) {
+        return banner.setBanner(itemStack);
     }
 
     public void addMember(UUID uuid) {

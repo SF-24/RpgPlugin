@@ -67,7 +67,6 @@ public final class Rpg extends JavaPlugin {
     ClickManager clickManager = new ClickManager(this);
     GuildManager guildManager = new GuildManager(this);
     GuildConfig guildConfig = new GuildConfig(this);
-    // GuildDataManager guildDataManager = new GuildDataManager(this);
     HogwartsDataManager hogwartsDataManager = new HogwartsDataManager(this);
     DatabaseConfigManager databaseConfigManager = new DatabaseConfigManager(this);
     DatabaseManager databaseManager;
@@ -150,6 +149,7 @@ public final class Rpg extends JavaPlugin {
         getCommand("profile").setExecutor(new ProfileCommand(this));
         getCommand("spell").setExecutor(new SpellCommand(this));
         getCommand("house_points").setExecutor(new HousePointCommand(this));
+        getCommand("player_model").setExecutor(new PlayerModelCommand(this));
 
         getCommand("settings").setTabCompleter(new SettingsTabCompleter());
         getCommand("getitem").setTabCompleter(new GetItemCommandTab());
