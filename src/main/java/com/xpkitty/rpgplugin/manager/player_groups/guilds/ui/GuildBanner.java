@@ -84,7 +84,7 @@ public class GuildBanner {
         return this.banner;
     }
 
-    public void updateBannerItem(BannerMeta bannerMeta) {
+    public void updateBannerItem() {
         String name = ChatColor.GOLD + "Guild Banner";
         String lore = ChatColor.GRAY + "A banner for a guild";
         bannerMeta.setDisplayName(name);
