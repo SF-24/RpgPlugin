@@ -74,7 +74,7 @@ public class GuildDataClass {
         return banner.setBanner(itemStack);
     }
 
-    // is a player a member of this guilde
+    // is a player a member of this guild
     public boolean isMember(UUID uuid) {
         return members.containsKey(uuid) || guildOwner.equals(uuid);
     }
