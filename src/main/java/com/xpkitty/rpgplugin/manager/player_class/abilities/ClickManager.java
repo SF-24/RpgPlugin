@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -162,7 +162,7 @@ public class ClickManager {
 
 
     public void testAbilities(Player player) {
-        HashMap<String, AbilityType> combos = MiscPlayerManager.getPlayerCombos(player,rpg);
+        HashMap<String, AbilityType> combos = MiscPlayerManager.getPlayerCombos(player);
 
         for(String key : combos.keySet()) {
             if(key.equalsIgnoreCase(getKeysAsString(player))) {

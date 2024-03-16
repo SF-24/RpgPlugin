@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -21,12 +21,11 @@ package com.xpkitty.rpgplugin.manager;
 
 import com.xpkitty.rpgplugin.Rpg;
 import com.xpkitty.rpgplugin.listener.ConnectListener;
-import com.xpkitty.rpgplugin.manager.data.new_player_data.NewDataReader;
 import com.xpkitty.rpgplugin.manager.data.player_data.PlayerDataManager;
 import com.xpkitty.rpgplugin.manager.data.player_data.PlayerSpellFile;
 import com.xpkitty.rpgplugin.manager.data.spell_data.MainSpellData;
-import com.xpkitty.rpgplugin.manager.player_class.ClassList;
 import com.xpkitty.rpgplugin.manager.player_class.abilities.AbilityType;
+import com.xpkitty.rpgplugin.manager.skills.PlayerSkillManager;
 import com.xpkitty.rpgplugin.manager.skills.PlayerSkills;
 import com.xpkitty.rpgplugin.manager.spells.enum_list.HpSpellsList;
 import com.xpkitty.rpgplugin.manager.spells.spell_crafting.CustomSpellManager;
@@ -51,7 +50,9 @@ public class UIManager {
 
     // OPEN MAIN PLAYER MENU
 
-    public static void openMenu(Player player, Rpg rpg) {
+    public static void openMenu(Player player) {
+
+        Rpg rpg = Rpg.getRpg();
 
         // CREATE MENU INVENTORY
         Inventory ui = Bukkit.createInventory(null, 9, ChatColor.BLACK + "Menu");
@@ -138,7 +139,7 @@ public class UIManager {
         abilityScoreItem.setItemMeta(abilityScoreItemMeta);
         ui.setItem(2,abilityScoreItem);
 
-        // skills
+        // skills -> load skills from json and displays them
         ItemStack skills = new ItemStack(Material.IRON_SWORD);
         ItemMeta skillMeta = skills.getItemMeta();
 
@@ -147,12 +148,11 @@ public class UIManager {
 
         ArrayList<String> lore = new ArrayList<>();
 
-        NewDataReader newDataReader = new NewDataReader(player,rpg);
 
         for(AbilityScores abilityScore : AbilityScores.values()) {
-            for(PlayerSkills skill : newDataReader.loadData(rpg,player).getSkillMap().keySet()) {
+            for(PlayerSkills skill : PlayerSkillManager.getPlayerSkillList(player)) {
                 if (abilityScore.equals(skill.getBaseAbilityScore())) {
-                    lore.add(skill.getBaseAbilityScore().getColour() + skill.getName() + " " + skill.getBaseAbilityScore().getDarkerColour() + newDataReader.getSkillLevel(player, skill));
+                    lore.add(skill.getBaseAbilityScore().getColour() + skill.getName() + " " + skill.getBaseAbilityScore().getDarkerColour() + PlayerSkillManager.getPlayerSkillLevel(player,skill));
                 }
             }
         }
@@ -165,7 +165,7 @@ public class UIManager {
         ItemStack abilityItem = new ItemStack(Material.ENCHANTED_BOOK);
         ItemMeta abilityItemMeta = abilityItem.getItemMeta();
         abilityItemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + "Abilities");
-        if(MiscPlayerManager.getAbilities(player,rpg).size()<1) {
+        if(MiscPlayerManager.getAbilities(player).size()<1) {
             abilityItemMeta.setLore(Collections.singletonList(ChatColor.RED + "Learn an ability to unlock this"));
         }
         abilityItem.setItemMeta(abilityItemMeta);
@@ -196,7 +196,9 @@ public class UIManager {
 
 
 
-    public static void openAbilityCustomizeMenu(Player player, Rpg rpg, AbilityType ability) {
+    public static void openAbilityCustomizeMenu(Player player, AbilityType ability) {
+        Rpg rpg = Rpg.getRpg();
+
         Inventory ui = Bukkit.createInventory(null, 27, ChatColor.BLACK + "Customize " + ability.getName() + "tempClear");
 
         ItemStack menuItemDown = new ItemStack(Material.PEONY);
@@ -257,7 +259,7 @@ public class UIManager {
     public static void openAbilitiesMenu(Player player, Rpg rpg) {
 
 
-        ArrayList<AbilityType> abilities = MiscPlayerManager.getAbilities(player,rpg);
+        ArrayList<AbilityType> abilities = MiscPlayerManager.getAbilities(player);
 
         Inventory ui = Bukkit.createInventory(null,27,ChatColor.BLACK +"Abilities " + "tempClear");
 
@@ -292,65 +294,6 @@ public class UIManager {
         }
         player.openInventory(ui);
     }
-
-
-    //OPEN PLAYER CLASS MENU
-
-    public static void openClassMenu(Player player,Rpg rpg) {
-
-        Inventory ui = Bukkit.createInventory(null,9, ChatColor.WHITE+"Class Menu" + "tempClear");
-
-        ItemStack menuItemDown = new ItemStack(Material.PEONY);
-        ItemMeta menuItemDownMeta = menuItemDown.getItemMeta();
-        menuItemDownMeta.setDisplayName(ChatColor.WHITE.toString());
-        menuItemDownMeta.setCustomModelData(20);
-        menuItemDown.setItemMeta(menuItemDownMeta);
-        ui.setItem(8, menuItemDown);
-
-        ItemStack peony = new ItemStack(Material.PEONY);
-        ItemMeta peonyMeta = peony.getItemMeta();
-        peonyMeta.setDisplayName("");
-        peonyMeta.setCustomModelData(4);
-        peony.setItemMeta(peonyMeta);
-
-        ui.addItem(peony);
-
-        boolean hasClass = false;
-        ClassList currentClass = MiscPlayerManager.getPlayerClass(player,rpg);
-
-        if(currentClass != null) {
-            hasClass = true;
-        }
-
-
-        for(ClassList classList : ClassList.values()) {
-
-            ItemStack classItem = new ItemStack(classList.getTexture());
-            ItemMeta classItemMeta = classItem.getItemMeta();
-            classItemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES,ItemFlag.HIDE_DYE,ItemFlag.HIDE_POTION_EFFECTS);
-            classItemMeta.setDisplayName(ChatColor.WHITE + classList.getDisplay());
-            classItemMeta.setLocalizedName(classList.name());
-            classItemMeta.setCustomModelData(classList.getCustomModelData());
-
-            if(hasClass) {
-                if(currentClass.equals(classList)) {
-                    classItemMeta.setLore(Collections.singletonList(ChatColor.RED + "You have already chosen a class"));
-
-                } else {
-                    classItemMeta.setLore(Collections.singletonList(ChatColor.RED + "You have already chosen a class"));
-                }
-            } else {
-                classItemMeta.setLore(Collections.singletonList(ChatColor.GOLD + "Click to choose class"));
-            }
-
-            classItem.setItemMeta(classItemMeta);
-
-            ui.addItem(classItem);
-        }
-
-        player.openInventory(ui);
-    }
-
 
 
 
@@ -424,7 +367,7 @@ public class UIManager {
 
 
         int level = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml().getInt("level");
-        int abilityCap = MiscPlayerManager.calculateAbilityScoreCaps(level, rpg);
+        int abilityCap = MiscPlayerManager.calculateAbilityScoreCaps(level);
 
 
 
@@ -543,7 +486,9 @@ public class UIManager {
 
 
 
-    public static void openSpellMenu(Player player, Rpg rpg, boolean showLearned) {
+    public static void openSpellMenu(Player player, boolean showLearned) {
+        Rpg rpg = Rpg.getRpg();
+
         //Set windowName variable - tempClear stands for tem clearing of inventory
         String windowName = "mainSpellMenu" + "tempClear";
 
@@ -729,12 +674,12 @@ public class UIManager {
                     //set lore
 
                     //display spell name if player INT >= 13
-                    if (MiscPlayerManager.getAbilityScore(rpg, player, AbilityScores.INT) >= 13) {
+                    if (MiscPlayerManager.getAbilityScore(player, AbilityScores.INT) >= 13) {
                         lore.add(ChatColor.WHITE + name);
                     }
 
                     //display spell type if player INT >= 13
-                    if (MiscPlayerManager.getAbilityScore(rpg, player, AbilityScores.INT) >= 13) {
+                    if (MiscPlayerManager.getAbilityScore(player, AbilityScores.INT) >= 13) {
                         lore.add(ChatColor.WHITE + type);
                     }
 
@@ -779,13 +724,13 @@ public class UIManager {
             player.sendMessage(ChatColor.RED + "You do not know any spells");
         }
 
-
-
         //open menu for player
         player.openInventory(ui);
     }
 
-    public static void openSingleSpellMenu(Rpg rpg, Player player, int numericId) {
+    public static void openSingleSpellMenu(Player player, int numericId) {
+
+        Rpg rpg = Rpg.getRpg();
 
         // 21 Red tick
         // 22 Yellow tick

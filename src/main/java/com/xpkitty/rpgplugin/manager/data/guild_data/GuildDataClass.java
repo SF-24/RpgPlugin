@@ -32,20 +32,29 @@ public class GuildDataClass {
 
     // guild variables
 
+    // id and name
     int guildId;
     String guildName;
 
+    // owner and members
     UUID guildOwner;
     HashMap<UUID, GuildRank> members = new HashMap<>();
 
+    // pending join requests
     ArrayList<UUID> pendingJoinRequests = new ArrayList<>();
 
+    // open status
     boolean isPublic = true;
 
+    // level and xp
     int guildLevel = 1;
     int guildXp = 0;
 
+    // banner ; and coming soon: armour
     GuildBanner banner = new GuildBanner();
+
+    // currency and balance
+    int balance = 0;
 
     // has the guild been setup
     boolean isSetup = false;
@@ -58,6 +67,27 @@ public class GuildDataClass {
         members.put(owner,GuildRank.GUILDMASTER);
         isSetup = true;
     }
+
+    /**
+     * BANK AND CURRENCY
+     * */
+
+    public void depositBalance(int amount) {
+        balance+=amount;
+    }
+
+    public boolean hasBalance(int amount) {
+        return balance >= amount;
+    }
+
+    public boolean withdrawBalance(int amount) {
+        if(hasBalance(amount)) {balance-=amount; return true;}
+        return false;
+    }
+
+    /**
+     * BANNERS
+     * */
 
     // get the banner
     public GuildBanner getBanner() {
@@ -108,7 +138,11 @@ public class GuildDataClass {
     }
 
     // add xp and test level
-    public void updateLevel() {}
+    public void updateLevel()
+    {
+        //TODO
+    }
+
     public void addXp(int xp) {guildXp+=xp;}
 
     public int getXp() {return guildXp;}

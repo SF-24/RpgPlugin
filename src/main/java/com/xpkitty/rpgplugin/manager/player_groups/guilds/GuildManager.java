@@ -93,9 +93,11 @@ public class GuildManager {
     public static int getPlayerGuildCount(Rpg rpg, Player player) {
         int count = 0;
 
-        for(Integer id : getGuildList(rpg)) {
-            if(GuildManager.isPlayerInGuild(rpg,id,player.getUniqueId())) {
-                count++;
+        if(getGuildList(rpg).size()>=1) {
+            for (Integer id : getGuildList(rpg)) {
+                if (GuildManager.isPlayerInGuild(rpg, id, player.getUniqueId())) {
+                    count++;
+                }
             }
         }
         return count;

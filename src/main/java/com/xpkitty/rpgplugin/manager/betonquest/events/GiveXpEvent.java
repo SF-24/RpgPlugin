@@ -18,19 +18,24 @@
  *
  */
 
-package com.xpkitty.rpgplugin.manager.economy;
+package com.xpkitty.rpgplugin.manager.betonquest.events;
 
-import org.bukkit.Bukkit;
+import com.xpkitty.rpgplugin.manager.ExperienceManager;
+import org.betonquest.betonquest.api.profiles.Profile;
+import org.betonquest.betonquest.api.quest.event.Event;
+import org.betonquest.betonquest.exceptions.InstructionParseException;
+import org.betonquest.betonquest.exceptions.QuestRuntimeException;
 
-public class VaultCompatibility {
-    public static void vaultSetup() {
-        if (Bukkit.getServer().getPluginManager().isPluginEnabled("Vault")) {
-            Bukkit.getLogger().info("[(EliteMobs] Vault detected.");
-            if (true /* USE VAULT */) {
-                Bukkit.getLogger().warning("[RpgPlugin] Vault is enabled ");
-                // TODO: ADD VAULT COMPATIBILITY
-            }
+public class GiveXpEvent implements Event {
 
-        }
+    final int amount;
+
+    public GiveXpEvent(final int amount) throws InstructionParseException {
+        this.amount=amount;
+    }
+
+    @Override
+    public void execute(final Profile profile) throws QuestRuntimeException {
+        ExperienceManager.addXp(profile.getOnlineProfile().get().getPlayer(), amount);
     }
 }

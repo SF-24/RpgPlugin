@@ -1,6 +1,6 @@
 
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -44,10 +44,12 @@ public class PlayerDataClass {
         return skillsMap.get(skill).getXp();
     }
 
+    // set XP for skill
     public void setXp(PlayerSkills skill, int amount) {
         SkillClass skillClass = skillsMap.get(skill);
         int newValue = skillClass.getXp()+amount;
         skillClass.setXp(newValue);
+        updateLevel(skill);
         skillsMap.put(skill,skillClass);
     }
 
@@ -56,6 +58,12 @@ public class PlayerDataClass {
         int newValue = skillClass.getXp()+amount;
         skillClass.setLevel(newValue);
         skillsMap.put(skill,skillClass);
+    }
+
+    // check if a skill level needs to be recalculated
+    public void updateLevel(PlayerSkills skill) {
+        int exp = getSkillXp(skill);
+        // TODO: ADD LEVEL CALCULATION
     }
 
     // check if hashmap is missing any skills

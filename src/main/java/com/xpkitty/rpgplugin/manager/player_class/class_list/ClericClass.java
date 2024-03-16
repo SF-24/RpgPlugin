@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -40,8 +40,8 @@ public class ClericClass extends BaseClass {
 
     @Override
     public void onStart(Rpg rpg, Player player, ClassList type) {
-        MiscPlayerManager.learnSpell(player,rpg, SpellList.SACRED_FLAME,false);
-        MiscPlayerManager.learnSpell(player,rpg, SpellList.HEAL,false);
+        MiscPlayerManager.learnSpell(player, SpellList.SACRED_FLAME,false);
+        MiscPlayerManager.learnSpell(player, SpellList.HEAL,false);
 
         ItemStack is = new ItemStack(Material.STICK);
         ItemMeta itemMeta = is.getItemMeta();

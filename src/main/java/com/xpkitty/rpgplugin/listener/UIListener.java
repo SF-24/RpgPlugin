@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -26,12 +26,9 @@ import com.xpkitty.rpgplugin.manager.data.player_data.PlayerDataManager;
 import com.xpkitty.rpgplugin.manager.StringManager;
 import com.xpkitty.rpgplugin.manager.UIManager;
 import com.xpkitty.rpgplugin.manager.player_class.ArmourList;
-import com.xpkitty.rpgplugin.manager.player_class.ClassList;
-import com.xpkitty.rpgplugin.manager.player_class.ClassManager;
 import com.xpkitty.rpgplugin.manager.player_class.abilities.AbilityType;
 import com.xpkitty.rpgplugin.manager.skin.ArmourSelectedSkins;
 import com.xpkitty.rpgplugin.manager.spells.spell_ui.HotbarType;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -40,15 +37,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Objects;
 
 public class UIListener implements Listener {
 
@@ -98,9 +92,9 @@ public class UIListener implements Listener {
                     String armourType = (itemMeta.getLore()).get(0);
                     String armourTypeTranslated = (ChatColor.translateAlternateColorCodes('&',armourType));
 
-                    int STR = MiscPlayerManager.getAbilityScore(rpg,player, AbilityScores.STR);
-                    int CON = MiscPlayerManager.getAbilityScore(rpg,player, AbilityScores.CON);
-                    int DEX = MiscPlayerManager.getAbilityScore(rpg,player, AbilityScores.DEX);
+                    int STR = MiscPlayerManager.getAbilityScore(player, AbilityScores.STR);
+                    int CON = MiscPlayerManager.getAbilityScore(player, AbilityScores.CON);
+                    int DEX = MiscPlayerManager.getAbilityScore(player, AbilityScores.DEX);
 
                     System.out.println("DEBUG: " + player.getName() + " STR, DEX, CON= " + STR + " " + DEX + " " + CON + " ; for " + player.getName());
 
@@ -162,17 +156,14 @@ public class UIListener implements Listener {
 
                     if(e.getCurrentItem().getItemMeta().getLocalizedName().contains("open_spell_menu")) {
                         if (e.isLeftClick()) {
-                            UIManager.openSpellMenu(player, rpg, true);
+                            UIManager.openSpellMenu(player, true);
                         } else {
-                            UIManager.openSpellMenu(player, rpg, false);
+                            UIManager.openSpellMenu(player, false);
                         }
                     }
 
-                    if(e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&',ChatColor.AQUA+"Class Menu"))) {
-                        UIManager.openClassMenu(player,rpg);
-                    }
-
                     switch (clickedItem) {
+
                         case EMERALD:
                         case PEONY:
                             e.setCancelled(true);
@@ -185,42 +176,19 @@ public class UIListener implements Listener {
                         case KNOWLEDGE_BOOK:
                         case NETHER_STAR:
                             if(name.equalsIgnoreCase(ChatColor.LIGHT_PURPLE+"Abilities")) {
-                                if(MiscPlayerManager.getAbilities(player,rpg).size()>=1) {
+                                if(MiscPlayerManager.getAbilities(player).size()>=1) {
                                     UIManager.openAbilitiesMenu(player,rpg);
                                 }
                             }
                             break;
-                        case WOODEN_HOE:
-                            e.setCancelled(true);
+                        case IRON_SWORD:
+                            // TODO: ADD FUNCTIONALITY WHEN CLICKING ABILITIES
 
-                            if(e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&',ChatColor.AQUA+"Class Menu"))) {
-                                UIManager.openClassMenu(player,rpg);
-                            }
                             break;
                         default:
-                            return;
                     }
                 }
             }
-        } else if(e.getView().getTitle().contains(ChatColor.translateAlternateColorCodes('&',ChatColor.WHITE+"Class Menu"))) {
-
-
-            if(e.getCurrentItem() != null && e.getCurrentItem().getItemMeta() != null) {
-                if(MiscPlayerManager.getPlayerClass(player,rpg) == null) {
-                    for(ClassList classList : ClassList.values()) {
-                        String localizedName = e.getCurrentItem().getItemMeta().getLocalizedName();
-                        if(localizedName.equalsIgnoreCase(classList.name())) {
-                            ClassManager.setClass(rpg,player,classList);
-                            UIManager.openClassMenu(player,rpg);
-                        }
-                    }
-                } else {
-                    player.sendMessage(ChatColor.RED + "You have already chosen a class");
-                }
-
-            }
-            e.setCancelled(true);
-
         } else if(e.getView().getTitle().contains(ChatColor.translateAlternateColorCodes('&',ChatColor.BLACK + "Abilities"))) {
 
             if(e.getCurrentItem() != null) {
@@ -229,7 +197,7 @@ public class UIListener implements Listener {
                         if(e.getCurrentItem().getItemMeta() != null) {
                             if(e.getCurrentItem().getItemMeta().getCustomModelData() == ability.getModelData()) {
                                 e.setCancelled(true);
-                                UIManager.openAbilityCustomizeMenu(player,rpg,ability);
+                                UIManager.openAbilityCustomizeMenu(player,ability);
                             }
                         }
                     }
@@ -265,7 +233,7 @@ public class UIListener implements Listener {
                             String path5 = ".value";
                             String path6 = ".modifier";
                             int level = modifyFile.getInt("level");
-                            int abilityCap = MiscPlayerManager.calculateAbilityScoreCaps(level, rpg);
+                            int abilityCap = MiscPlayerManager.calculateAbilityScoreCaps(level);
 
                             for(int i = level; i == 0; i--) {
                                 if(rpg.getConfigManager().getConfiguration().contains("ability-score-caps." + i)) {
@@ -416,7 +384,7 @@ public class UIListener implements Listener {
                     }
 
                     if (num < -10 || num > -1) {
-                        UIManager.openSingleSpellMenu(rpg, player, num);
+                        UIManager.openSingleSpellMenu(player, num);
                     }
                 }
             }
@@ -437,7 +405,7 @@ public class UIListener implements Listener {
 
                         rpg.getConnectListener().getPlayerSpellFile(player).setSlot(id,0,0);
 
-                        UIManager.openSingleSpellMenu(rpg,player,id);
+                        UIManager.openSingleSpellMenu(player,id);
                     }
 
                     if(localizedName.contains("plus")) {
@@ -448,23 +416,23 @@ public class UIListener implements Listener {
 
                         rpg.getConnectListener().getPlayerSpellFile(player).setSlot(id,slot,rpg.getConnectListener().getPlayerSpellFile(player).getEditHotbar());
                     
-                        UIManager.openSingleSpellMenu(rpg,player,id);
+                        UIManager.openSingleSpellMenu(player,id);
                     }
 
                     int id = Integer.parseInt(e.getView().getTitle().substring(23));
 
                     if(localizedName.contains("arrowDown")) {
                         rpg.getConnectListener().getPlayerSpellFile(player).subtractOneFromEditHotBar();
-                        UIManager.openSingleSpellMenu(rpg,player,id);
+                        UIManager.openSingleSpellMenu(player,id);
 
                     }
                     if(localizedName.contains("arrowUp")) {
                         rpg.getConnectListener().getPlayerSpellFile(player).addOneToEditHotBar();
-                        UIManager.openSingleSpellMenu(rpg,player,id);
+                        UIManager.openSingleSpellMenu(player,id);
 
                     }
                     if(localizedName.contains("tick")) {
-                        UIManager.openSpellMenu(player,rpg,true);
+                        UIManager.openSpellMenu(player,true);
                     }
                 }
             }
@@ -485,22 +453,22 @@ public class UIListener implements Listener {
                                     // ADD CLICK
                                     if (e.getClick().isLeftClick()) {
                                         rpg.getClickManager().addSetLeftClick(player);
-                                        UIManager.openAbilityCustomizeMenu(player, rpg, ability);
+                                        UIManager.openAbilityCustomizeMenu(player, ability);
                                     } else if (e.getClick().isRightClick()) {
                                         rpg.getClickManager().addSetRightClick(player);
-                                        UIManager.openAbilityCustomizeMenu(player, rpg, ability);
+                                        UIManager.openAbilityCustomizeMenu(player, ability);
                                     }
                                     break;
                                 case 25:
                                     // RESET COMBO - REFRESH
                                     rpg.getClickManager().resetSetClicks(player);
-                                    UIManager.openAbilityCustomizeMenu(player, rpg, ability);
+                                    UIManager.openAbilityCustomizeMenu(player, ability);
                                     break;
                                 case 23:
                                     // CONFIRM
                                     boolean closeMenu = rpg.getClickManager().saveSetClicks(player, ability);
                                     if(closeMenu) {
-                                        UIManager.openMenu(player, rpg);
+                                        UIManager.openMenu(player);
                                         rpg.getClickManager().resetSetClicks(player);
                                     }
 

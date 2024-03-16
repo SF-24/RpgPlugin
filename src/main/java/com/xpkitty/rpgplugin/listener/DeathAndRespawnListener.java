@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -21,8 +21,6 @@ package com.xpkitty.rpgplugin.listener;
 
 import com.xpkitty.rpgplugin.Rpg;
 import com.xpkitty.rpgplugin.manager.ExperienceManager;
-import com.xpkitty.rpgplugin.manager.MiscPlayerManager;
-import com.xpkitty.rpgplugin.manager.spells.spell_ui.SpellHotbarManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -37,7 +35,7 @@ public class DeathAndRespawnListener implements Listener {
 
     @EventHandler
     void PlayerRespawnEvent(PlayerRespawnEvent e) {
-        ExperienceManager.updateXpBar(rpg, e.getPlayer());
+        ExperienceManager.updateXpBar(e.getPlayer());
     }
 
     @EventHandler

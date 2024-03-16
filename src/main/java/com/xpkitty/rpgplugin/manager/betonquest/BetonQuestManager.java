@@ -21,23 +21,43 @@
 package com.xpkitty.rpgplugin.manager.betonquest;
 
 import com.xpkitty.rpgplugin.Rpg;
+import com.xpkitty.rpgplugin.manager.betonquest.conditions.AbilityScoreCondition;
+import com.xpkitty.rpgplugin.manager.betonquest.conditions.SkillCondition;
+import com.xpkitty.rpgplugin.manager.betonquest.events.GiveXpEvent;
+import com.xpkitty.rpgplugin.manager.betonquest.events.GiveXpEventFactory;
+import com.xpkitty.rpgplugin.manager.betonquest.events.GiveXpStaticEventFactory;
 import org.betonquest.betonquest.BetonQuest;
 import org.betonquest.betonquest.api.logger.BetonQuestLoggerFactory;
+import org.betonquest.betonquest.api.quest.event.EventFactory;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 
 public class BetonQuestManager {
 
-    Rpg rpg;
+    private boolean useBetonQuest = false;
     BetonQuestLoggerFactory loggerFactory;
 
-    public BetonQuestManager(Rpg rpg) {
-        this.rpg=rpg;
+    public BetonQuestManager() {
+        Initialise();
     }
 
     public void Initialise() {
-        loggerFactory = rpg.getServer().getServicesManager().load(BetonQuestLoggerFactory.class);
+        if (Bukkit.getServer().getPluginManager().isPluginEnabled("BetonQuest")) {
+            // Load BetonQuest and inject methods
+            loggerFactory = Bukkit.getServicesManager().load(BetonQuestLoggerFactory.class);
+            useBetonQuest = true;
+            InjectMethods();
+        }
     }
 
-    public BetonQuestLoggerFactory getLoggerFactory() {
-        return loggerFactory;
+    // Register and inject custom methods
+    private void InjectMethods() {
+        BetonQuest.getInstance().registerConditions("rpgabilityscore", AbilityScoreCondition.class);
+        BetonQuest.getInstance().registerConditions("rpgskill", SkillCondition.class);
+
+        Plugin plugin = Bukkit.getPluginManager().getPlugin("RpgPlugin");
+        BetonQuest.getInstance().registerEvent("rpgxp", new GiveXpEventFactory(loggerFactory, Bukkit.getServer(), Bukkit.getScheduler(), plugin), new GiveXpStaticEventFactory(loggerFactory, Bukkit.getServer(), Bukkit.getScheduler(), plugin));
     }
+
+    public boolean useBetonQuest() {return useBetonQuest;}
 }

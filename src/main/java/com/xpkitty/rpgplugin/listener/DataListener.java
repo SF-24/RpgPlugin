@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -36,8 +36,7 @@ public class DataListener implements Listener {
     @EventHandler
     public void onExp(PlayerExpChangeEvent e) {
         Player player = e.getPlayer();
-        ExperienceManager experienceManager = new ExperienceManager();
-        experienceManager.addXp(player, rpg, e.getAmount());
+        ExperienceManager.addXp(player, e.getAmount());
         e.setAmount(0);
     }
 

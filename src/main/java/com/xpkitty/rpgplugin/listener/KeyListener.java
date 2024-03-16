@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -43,13 +43,13 @@ public class KeyListener implements Listener {
     public void onKey(AriKeyPressEvent e) {
         if(e.getId().equals(NamespacedKey.fromString("key:menu"))) {
             e.getPlayer().closeInventory();
-            UIManager.openMenu(e.getPlayer(), rpg);
+            UIManager.openMenu(e.getPlayer());
         } else if(e.getId().equals(NamespacedKey.fromString("key:ability_menu"))) {
             e.getPlayer().closeInventory();
             UIManager.openAbilitiesMenu(e.getPlayer(), rpg);
         } else if(e.getId().equals(NamespacedKey.fromString("key:spell_menu"))) {
             e.getPlayer().closeInventory();
-            UIManager.openSpellMenu(e.getPlayer(), rpg, true);
+            UIManager.openSpellMenu(e.getPlayer(), true);
         }
 
         boolean isAbilityKey = e.getId().equals(NamespacedKey.fromString("ab_key:ab_left")) || e.getId().equals(NamespacedKey.fromString("ab_key:ab_right"));
@@ -63,10 +63,10 @@ public class KeyListener implements Listener {
         boolean isWand = false;
         boolean isExtendableWeapon = ExtendableWeaponManager.isExtendableWeapon(player.getInventory().getItemInMainHand());
 
-        if(isExtendableWeapon && !MiscPlayerManager.getLightsaberRightClickToggleSetting(rpg,player) && isLeft) {
+        if(isExtendableWeapon && !MiscPlayerManager.getLightsaberRightClickToggleSetting(player) && isLeft) {
             ExtendableWeaponManager.toggleFoldingWeapon(rpg, player, PlayerHand.MAIN_HAND);
         }
-        if(isSaber && !MiscPlayerManager.getLightsaberRightClickToggleSetting(rpg,player) && isLeft) {
+        if(isSaber && !MiscPlayerManager.getLightsaberRightClickToggleSetting(player) && isLeft) {
             LightsaberManager.toggleLightsaber(rpg,player,PlayerHand.MAIN_HAND);
         }
 
@@ -82,7 +82,7 @@ public class KeyListener implements Listener {
             rpg.getSpellHotbarManager().hotBarUp(player);
         }
 
-        if(!MiscPlayerManager.getSneakAbilitySetting(rpg,player) && isAbilityKey && !isWand && !isExtendableWeapon && !isSaber) {
+        if(!MiscPlayerManager.getSneakAbilitySetting(player) && isAbilityKey && !isWand && !isExtendableWeapon && !isSaber) {
             if (isRight) {
                 if(player.getInventory().getItemInMainHand().getItemMeta()!=null) {
                     if(player.getInventory().getItemInMainHand().getItemMeta().getLocalizedName().contains("wand")) {
@@ -114,7 +114,7 @@ public class KeyListener implements Listener {
     @EventHandler
     public void onKeyLetGo(AriKeyReleaseEvent e) {
         if(e.getId().equals(NamespacedKey.fromString("key:menu"))) {
-            UIManager.openMenu(e.getPlayer(), rpg);
+            UIManager.openMenu(e.getPlayer());
         } else if(e.getId().equals(NamespacedKey.fromString("key:ability_menu"))) {
             UIManager.openAbilitiesMenu(e.getPlayer(), rpg);
         }

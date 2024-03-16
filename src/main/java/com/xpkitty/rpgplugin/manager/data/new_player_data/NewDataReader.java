@@ -1,6 +1,6 @@
 
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -170,11 +170,11 @@ public class NewDataReader {
         saveFile(data,player);
     }
 
-    public void addXpLevel(Player player, PlayerSkills skill, int amount) {
+    public void addXp(Player player, PlayerSkills skill, int amount) {
         PlayerDataClass data = loadData(rpg, player);
-        int level = data.getSkillXp(skill);
-        level +=amount;
-        data.setXp(skill,level);
+        int exp = data.getSkillXp(skill);
+        exp+=amount;
+        data.setXp(skill,exp);
         saveFile(data,player);
     }
 

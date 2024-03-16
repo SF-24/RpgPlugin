@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -61,15 +61,13 @@ public class ExperienceCommand implements CommandExecutor {
             } else if(args.length == 2 && args[0].equalsIgnoreCase("give")) {
                 int setExp = Integer.parseInt(args[1]);
 
-                ExperienceManager experienceManager = new ExperienceManager();
-                experienceManager.addXp(player, rpg, setExp);
+                ExperienceManager.addXp(player, setExp);
             } else if(args.length == 3 && args[0].equalsIgnoreCase("give")) {
                 Player player2 = Bukkit.getPlayer(args[2]);
 
                 int setExp = Integer.parseInt(args[1]);
 
-                ExperienceManager experienceManager = new ExperienceManager();
-                experienceManager.addXp(player2, rpg, setExp);
+                ExperienceManager.addXp(player2, setExp);
 
             } else if(args.length == 3 && args[0].equalsIgnoreCase("give_party_per_player")) {
                 //TODO: CHECK LINE 57
@@ -82,11 +80,11 @@ public class ExperienceCommand implements CommandExecutor {
 
                     for(Player partyPlayer : partyInstance.getPlayers()) {
                         int setExp = Integer.parseInt(args[1]);
-                        new ExperienceManager().addXp(partyPlayer, rpg, setExp);
+                        ExperienceManager.addXp(partyPlayer, setExp);
                     }
                 } else {
                     int setExp = Integer.parseInt(args[1]);
-                    new ExperienceManager().addXp(player2, rpg, setExp);
+                    ExperienceManager.addXp(player2, setExp);
                 }
 
 
@@ -100,11 +98,11 @@ public class ExperienceCommand implements CommandExecutor {
 
                     for(Player partyPlayer : partyInstance.getPlayers()) {
                         int setExp = Integer.parseInt(args[1]);
-                        new ExperienceManager().addXp(partyPlayer, rpg, setExp);
+                        ExperienceManager.addXp(partyPlayer, setExp);
                     }
                 } else {
                     int setExp = Integer.parseInt(args[1]);
-                    new ExperienceManager().addXp(player, rpg, setExp);
+                    ExperienceManager.addXp(player, setExp);
                 }
 
 
@@ -119,11 +117,11 @@ public class ExperienceCommand implements CommandExecutor {
                     int perPlayer = (int) (Float.parseFloat(args[1])/partyInstance.getPlayers().size());
 
                     for(Player partyPlayer : partyInstance.getPlayers()) {
-                        new ExperienceManager().addXp(partyPlayer, rpg, perPlayer);
+                        ExperienceManager.addXp(partyPlayer, perPlayer);
                     }
                 } else {
                     int setExp = Integer.parseInt(args[1]);
-                    new ExperienceManager().addXp(player, rpg, setExp);
+                    ExperienceManager.addXp(player, setExp);
                 }
 
 
@@ -139,11 +137,11 @@ public class ExperienceCommand implements CommandExecutor {
                     int perPlayer = (int) (Float.parseFloat(args[1])/partyInstance.getPlayers().size());
 
                     for(Player partyPlayer : partyInstance.getPlayers()) {
-                        new ExperienceManager().addXp(partyPlayer, rpg, perPlayer);
+                        ExperienceManager.addXp(partyPlayer, perPlayer);
                     }
                 } else {
                     int setExp = Integer.parseInt(args[1]);
-                    new ExperienceManager().addXp(player2, rpg, setExp);
+                    ExperienceManager.addXp(player2, setExp);
                 }
 
 
@@ -162,7 +160,7 @@ public class ExperienceCommand implements CommandExecutor {
                     e.printStackTrace();
                     player.sendMessage(ChatColor.RED + "ERROR trying to save yamlConfiguration. IOException");
                 }
-                ExperienceManager.setXpBar(rpg, player, xpToSet,level);
+                ExperienceManager.setXpBar(player, xpToSet,level);
             }
         } else {
             if(args.length == 1 && args[0].equalsIgnoreCase("list") && Bukkit.getServer().getOnlinePlayers().size()>0) {

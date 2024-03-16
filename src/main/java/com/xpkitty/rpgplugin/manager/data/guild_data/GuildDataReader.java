@@ -1,6 +1,6 @@
 
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -70,6 +70,9 @@ public class GuildDataReader {
 
         File file = new File(getPath(), guildId + ".json");
 
+        if(!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
         if(!file.exists()) {
             makeNewFile(file);
         }
@@ -155,15 +158,18 @@ public class GuildDataReader {
         writeData(data, getFile(rpg,guildId));
     }
 
-    public void saveFile(GuildDataClass data, Player player) {
-        writeData(data, getFile(rpg,guildId));
-    }
-
     public void setup(int id,String name, UUID owner) {
         GuildDataClass data = loadData(rpg, id);
-        if(!data.isSetup) {
-            data.setupGuild(id, name, owner);
-            saveFile(data, id);
-        }
+        saveFile(data, id);
+
+        // usually causes null pointer exception
+        try {
+            if(data.isSetup()) {
+                return;
+            }
+        } catch (NullPointerException ignored) {}
+        data.setupGuild(id, name, owner);
+        saveFile(data, id);
+
     }
 }

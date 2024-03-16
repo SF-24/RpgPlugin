@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -35,7 +35,9 @@ import java.util.List;
 public class ExperienceManager {
 
 
-    public static void updateXpBar(Rpg rpg, Player player) {
+    public static void updateXpBar(Player player) {
+        Rpg rpg =Rpg.getRpg();
+
         if(player.hasPermission("rpgpl.debug")) {
         }
         player.sendMessage("DEBUG: updating xp bar");
@@ -46,46 +48,46 @@ public class ExperienceManager {
         int exp = yamlConfiguration.getInt("experience");
         int level = yamlConfiguration.getInt("level");
 
-        setXpBar(rpg, player, exp, level);
+        setXpBar(player, exp, level);
     }
 
-    public static void setXpBar(Rpg rpg, Player player, int exp, int level) {
-        ArrayList<String> offList = new ArrayList<>();/*
+    public static void setXpBar(Player player, int exp, int level) {
+        ArrayList<String> offList = new ArrayList<>();
         offList.add("world");
         offList.add("world_nether");
-        offList.add("world_the_end");*/
+        offList.add("world_the_end");
         offList.add("CityLife");
-        /*offList.add("more");*/
 
         if(!offList.contains(player.getWorld().getName())) {
-            List<?> list = rpg.getConfigManager().getConfiguration().getList("experience-per-level");
+            List<?> list = Rpg.getRpg().getConfigManager().getConfiguration().getList("experience-per-level");
+
             player.setLevel(level);
+
+            assert list != null;
             float levelXp = Float.parseFloat(String.valueOf(list.get(level)));
             float lastLevelXp = Float.parseFloat(String.valueOf(list.get(level-1)));
-            StringManager stringManager = new StringManager();
-            if(player.hasPermission("rpgpl.debug")) {
-                StringManager.debugMessage(player,"Level Xp " + levelXp +  " last Level Xp " + lastLevelXp + " Xp " + exp);
-            }
+
+            StringManager.debugMessage(player,"Level Xp " + levelXp +  " last Level Xp " + lastLevelXp + " Xp " + exp);
+
             if(level < list.size()) {
                 float percentage = (exp-lastLevelXp)/(levelXp-lastLevelXp);
-                if(player.hasPermission("rpgpl.debug")) {
-                    player.sendMessage(ChatColor.RED + "[DEBUG] " + "exp-lastLevelXp/levelXp-lastLevelXp=" + percentage);
-                }
+                StringManager.debugMessage(player, ChatColor.RED + "exp-lastLevelXp/levelXp-lastLevelXp=" + percentage);
                 player.setExp(percentage);
             } else {
                 player.setExp(0.0f);
             }
         } else {
-            player.sendMessage("Cannot update XP Bar");
+            StringManager.debugMessage(player, "Cannot update XP Bar");
         }
     }
 
-    public void addXp(Player player, Rpg rpg, int amount) {
+    public static void addXp(Player player, int amount) {
+
+        Rpg rpg = Rpg.getRpg();
 
         PlayerDataManager playerDataManager = rpg.getConnectListener().getPlayerDataInstance(player);
         YamlConfiguration yamlConfiguration = playerDataManager.getModifyYaml();
         File file = playerDataManager.getYamlFile();
-
 
         int level = yamlConfiguration.getInt("level");
         int xp = yamlConfiguration.getInt("experience") + amount;
@@ -110,16 +112,14 @@ public class ExperienceManager {
 
         String msg = "§b§l+" + amount + " EXP";
         player.spigot().sendMessage(ChatMessageType.CHAT, TextComponent.fromLegacyText(msg));
-        setXpBar(rpg, player, xp, newLevel);
+        setXpBar(player, xp, newLevel);
 
         if(newLevel > level) {
             rpg.getPlayerLevelManager().levelUp(player, level, newLevel, toNext);
         }
-        ExperienceManager.updateXpBar(rpg,player);
+        ExperienceManager.updateXpBar(player);
 
         player.sendMessage("XP: " + xp);
         player.sendMessage("LEVEL: " + level);
-
     }
-
 }

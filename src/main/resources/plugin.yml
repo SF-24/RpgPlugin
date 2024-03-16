@@ -5,7 +5,7 @@ api-version: 1.19
 authors: [ XpKitty ]
 description: Another RPG plugin
 depend: [ AriKeys ]
-softdepend: [ BetonQuest ]
+softdepend: [ BetonQuest, Vault ]
 website: xpkc.wordpress.com
 commands:
   achievements:

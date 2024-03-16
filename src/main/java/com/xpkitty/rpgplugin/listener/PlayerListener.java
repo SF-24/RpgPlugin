@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -296,7 +296,7 @@ public class PlayerListener implements Listener {
         String inventoryTitle = ChatColor.translateAlternateColorCodes('&',e.getView().getTitle());
 
         if(inventoryTitle.equalsIgnoreCase(ChatColor.BLACK + "Menu") || inventoryTitle.contains("loadinvonclose") || inventoryTitle.contains("tempClear")) {
-            com.xpkitty.rpgplugin.manager.MiscPlayerManager.tempClearInventory(rpg,player);
+            com.xpkitty.rpgplugin.manager.MiscPlayerManager.tempClearInventory(player);
         }
     }
 
@@ -325,7 +325,7 @@ public class PlayerListener implements Listener {
         String inventoryTitle = ChatColor.translateAlternateColorCodes('&',e.getView().getTitle());
 
         if(inventoryTitle.equalsIgnoreCase(ChatColor.BLACK + "Menu") || inventoryTitle.contains("loadinvonclose") || inventoryTitle.contains("tempClear")) {
-            com.xpkitty.rpgplugin.manager.MiscPlayerManager.loadPlayerInventory(player,rpg);
+            com.xpkitty.rpgplugin.manager.MiscPlayerManager.loadPlayerInventory(player);
         }
 
         if(item.getItemMeta() != null ) {
@@ -389,7 +389,7 @@ public class PlayerListener implements Listener {
                 if(newItem.getItemMeta().getLocalizedName().contains("spell_icon")) {
                     String spellId = newItem.getItemMeta().getLocalizedName().substring(10);
 
-                    if(!player.isSneaking() || !com.xpkitty.rpgplugin.manager.MiscPlayerManager.getAutoCastSetting(rpg,player)) {
+                    if(!player.isSneaking() || !com.xpkitty.rpgplugin.manager.MiscPlayerManager.getAutoCastSetting(player)) {
                         SpellLearnManager.loadCastTest(rpg,player, Integer.parseInt(spellId),true);
                     } else {
                         try {
@@ -472,9 +472,9 @@ public class PlayerListener implements Listener {
                     String armourType = (itemMeta.getLore()).get(0);
                     String armourTypeTranslated = (ChatColor.translateAlternateColorCodes('&',armourType));
 
-                    int STR = com.xpkitty.rpgplugin.manager.MiscPlayerManager.getAbilityScore(rpg,player, AbilityScores.STR);
-                    int CON = com.xpkitty.rpgplugin.manager.MiscPlayerManager.getAbilityScore(rpg,player, AbilityScores.CON);
-                    int DEX = com.xpkitty.rpgplugin.manager.MiscPlayerManager.getAbilityScore(rpg,player, AbilityScores.DEX);
+                    int STR = com.xpkitty.rpgplugin.manager.MiscPlayerManager.getAbilityScore(player, AbilityScores.STR);
+                    int CON = com.xpkitty.rpgplugin.manager.MiscPlayerManager.getAbilityScore(player, AbilityScores.CON);
+                    int DEX = com.xpkitty.rpgplugin.manager.MiscPlayerManager.getAbilityScore(player, AbilityScores.DEX);
 
                     System.out.println("DEBUG: " + player.getName() + " STR, DEX, CON= " + STR + " " + DEX + " " + CON + " ; for " + player.getName());
 

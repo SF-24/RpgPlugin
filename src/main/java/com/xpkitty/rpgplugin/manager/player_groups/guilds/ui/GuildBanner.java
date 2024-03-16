@@ -31,14 +31,14 @@ import java.util.Collections;
 
 public class GuildBanner {
 
-    ItemStack banner;
-    BannerMeta bannerMeta   ;
+   // ItemStack banner;
+  //  BannerMeta bannerMeta;
 
     ArrayList<Material> banners = new ArrayList<>();
 
     public GuildBanner() {
-        banner = new ItemStack(Material.WHITE_BANNER);
-        bannerMeta = (BannerMeta) banner.getItemMeta();
+   //     banner = new ItemStack(Material.WHITE_BANNER);
+  //      bannerMeta = (BannerMeta) banner.getItemMeta();
         updateBannerItem();
 
         banners.add(Material.WHITE_BANNER);
@@ -62,8 +62,8 @@ public class GuildBanner {
 
     public boolean setBanner(Material banner) {
         if(banners.contains(banner)) {
-            this.banner = new ItemStack(banner);
-            this.banner.setItemMeta(bannerMeta);
+   //         this.banner = new ItemStack(banner);
+   //         this.banner.setItemMeta(bannerMeta);
             updateBannerItem();
             return true;
         }
@@ -72,24 +72,24 @@ public class GuildBanner {
 
     public boolean setBanner(ItemStack banner) {
         if(banners.contains(banner.getType())) {
-            this.banner = banner;
-            this.bannerMeta = (BannerMeta) banner.getItemMeta();
+   //         this.banner = banner;
+   //         this.bannerMeta = (BannerMeta) banner.getItemMeta();
             updateBannerItem();
             return true;
         }
         return false;
     }
 
-    public ItemStack getBannerItem() {
+  /*  public ItemStack getBannerItem() {
         return this.banner;
     }
-
+*/
     public void updateBannerItem() {
         String name = ChatColor.GOLD + "Guild Banner";
         String lore = ChatColor.GRAY + "A banner for a guild";
-        bannerMeta.setDisplayName(name);
+    /*    bannerMeta.setDisplayName(name);
         bannerMeta.setLore(Collections.singletonList(lore));
         bannerMeta.setLocalizedName("guild_banner");
         banner.setItemMeta(bannerMeta);
-    }
+    */}
 }

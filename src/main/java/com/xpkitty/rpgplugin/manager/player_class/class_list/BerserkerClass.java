@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ public class BerserkerClass extends BaseClass {
 
     @Override
     public void onStart(Rpg rpg, Player player, ClassList type) {
-        MiscPlayerManager.learnAbility(player,rpg, AbilityType.ANVIL_STRIKE);
-        MiscPlayerManager.learnAbility(player,rpg, AbilityType.REND);
+        MiscPlayerManager.learnAbility(player, AbilityType.ANVIL_STRIKE);
+        MiscPlayerManager.learnAbility(player, AbilityType.REND);
     }
 }

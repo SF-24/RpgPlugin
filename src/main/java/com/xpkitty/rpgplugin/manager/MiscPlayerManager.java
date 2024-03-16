@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.xpkitty.rpgplugin.Rpg;
 import com.xpkitty.rpgplugin.manager.data.player_data.PlayerDataManager;
-import com.xpkitty.rpgplugin.manager.player_class.ClassList;
 import com.xpkitty.rpgplugin.manager.player_class.abilities.AbilityType;
 import com.xpkitty.rpgplugin.manager.player_class.abilities.AttackType;
 import com.xpkitty.rpgplugin.manager.player_groups.InviteManager;
@@ -288,7 +287,9 @@ public class MiscPlayerManager {
     }
 
 
-    public static int getAbilityScore(Rpg rpg, Player player, AbilityScores abilityScore) {
+    public static int getAbilityScore(Player player, AbilityScores abilityScore) {
+
+        Rpg rpg = Rpg.getRpg();
 
         YamlConfiguration yamlConfiguration = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
 
@@ -301,7 +302,9 @@ public class MiscPlayerManager {
         return 0;
     }
 
-    public static int getAbilityScoreModifier(Rpg rpg, Player player, AbilityScores abilityScore) {
+    public static int getAbilityScoreModifier(Player player, AbilityScores abilityScore) {
+
+        Rpg rpg = Rpg.getRpg();
 
         YamlConfiguration yamlConfiguration = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
 
@@ -313,9 +316,8 @@ public class MiscPlayerManager {
         return -1;
     }
 
-    public static ArrayList<AbilityType> getAbilities(Player player, Rpg rpg) {
-
-        return getAbilitiesList(player,rpg);
+    public static ArrayList<AbilityType> getAbilities(Player player) {
+        return getAbilitiesList(player,Rpg.getRpg());
     }
 
     public static int calculateAbilityScoreModifier(int value) {
@@ -336,30 +338,8 @@ public class MiscPlayerManager {
         return -5;
     }
 
-    public static ClassList getPlayerClass(Player player, Rpg rpg) {
-
-        YamlConfiguration modifyYaml = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
-
-        String className = modifyYaml.getString("player_class");
-
-        if(className == null) {
-            return null;
-        }
-
-        for(ClassList classList : ClassList.values()) {
-            if(className.equalsIgnoreCase(classList.name())) {
-
-             return classList;
-
-            }
-        }
-
-
-        return null;
-    }
-
-    public static HashMap<String, AbilityType> getPlayerCombos(Player player, Rpg rpg) {
-        YamlConfiguration comboConfiguration = rpg.getConnectListener().getPlayerDataInstance(player).getComboModifyYaml();
+    public static HashMap<String, AbilityType> getPlayerCombos(Player player) {
+        YamlConfiguration comboConfiguration = Rpg.getRpg().getConnectListener().getPlayerDataInstance(player).getComboModifyYaml();
         HashMap<String, AbilityType> combos = new HashMap<>();
 
         for(AbilityType abilityType : AbilityType.values()) {
@@ -373,10 +353,10 @@ public class MiscPlayerManager {
         return combos;
     }
 
-    public static int calculateAbilityScoreCaps(int level, Rpg rpg) {
+    public static int calculateAbilityScoreCaps(int level) {
         String path1 = "ability-score-caps.";
         int abilityCap = 20;
-        Configuration config = rpg.getConfigManager().getConfiguration();
+        Configuration config = Rpg.getRpg().getConfigManager().getConfiguration();
 
         if (level >= 20) {
             abilityCap = config.getInt(path1 + "20");
@@ -405,12 +385,12 @@ public class MiscPlayerManager {
         return abilityCap;
     }
 
-    public static String getCurrentPlayerProfile(Rpg rpg, Player player) {
-        return rpg.getConnectListener().getPlayerProfileInstance(player).getActiveProfile();
+    public static String getCurrentPlayerProfile(Player player) {
+        return Rpg.getRpg().getConnectListener().getPlayerProfileInstance(player).getActiveProfile();
     }
 
-    public static void saveLocationToFile(Player player, Rpg rpg) {
-        YamlConfiguration modifyYaml = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
+    public static void saveLocationToFile(Player player) {
+        YamlConfiguration modifyYaml = Rpg.getRpg().getConnectListener().getPlayerDataInstance(player).getModifyYaml();
 
         if(!modifyYaml.contains("location")) {
             modifyYaml.createSection("location");
@@ -432,14 +412,14 @@ public class MiscPlayerManager {
         modifyYaml.set("location.pitch",loc.getPitch());
 
         try {
-            modifyYaml.save(rpg.getConnectListener().getPlayerDataInstance(player).getYamlFile());
+            modifyYaml.save(Rpg.getRpg().getConnectListener().getPlayerDataInstance(player).getYamlFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static Location getSavedPlayerLocation(Player player, Rpg rpg) {
-        YamlConfiguration modifyYaml = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
+    public static Location getSavedPlayerLocation(Player player) {
+        YamlConfiguration modifyYaml = Rpg.getRpg().getConnectListener().getPlayerDataInstance(player).getModifyYaml();
 
         if(modifyYaml.contains("location")) {
             return new Location(Bukkit.getWorld(modifyYaml.getString("location.world")),
@@ -452,17 +432,17 @@ public class MiscPlayerManager {
         return null;
     }
 
-    public static void loadPlayerLocation(Player player, Rpg rpg) {
-        if(getSavedPlayerLocation(player,rpg) != null) {
-            if(getSavedPlayerLocation(player,rpg).getY()>0) {
-                player.teleport(getSavedPlayerLocation(player, rpg));
+    public static void loadPlayerLocation(Player player) {
+        if(getSavedPlayerLocation(player) != null) {
+            if(getSavedPlayerLocation(player).getY()>0) {
+                player.teleport(getSavedPlayerLocation(player));
             }
         }
     }
 
-    public static void saveEmptylayerInventory(Player player, Rpg rpg) {
+    public static void saveEmptyPlayerInventory(Player player) {
 
-        YamlConfiguration modifyYaml = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
+        YamlConfiguration modifyYaml = Rpg.getRpg().getConnectListener().getPlayerDataInstance(player).getModifyYaml();
 
         ItemStack[] inv = player.getInventory().getContents();
 
@@ -472,13 +452,14 @@ public class MiscPlayerManager {
         }
 
         try {
-            modifyYaml.save(rpg.getConnectListener().getPlayerDataInstance(player).getYamlFile());
+            modifyYaml.save(Rpg.getRpg().getConnectListener().getPlayerDataInstance(player).getYamlFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void savePlayerInventory(Player player, Rpg rpg) {
+    public static void savePlayerInventory(Player player) {
+        Rpg rpg = Rpg.getRpg();
 
         YamlConfiguration modifyYaml = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
 
@@ -498,7 +479,8 @@ public class MiscPlayerManager {
         }
     }
 
-    public static void loadPlayerInventory(Player player, Rpg rpg) {
+    public static void loadPlayerInventory(Player player) {
+        Rpg rpg = Rpg.getRpg();
 
         YamlConfiguration modifyYaml = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
 
@@ -521,7 +503,9 @@ public class MiscPlayerManager {
 
 
 
-    public static void learnSpell(Player player, Rpg rpg, SpellList spell,boolean isScroll) {
+    public static void learnSpell(Player player, SpellList spell, boolean isScroll) {
+        Rpg rpg = Rpg.getRpg();
+
         YamlConfiguration yamlConfiguration = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
         String spellName = spell.name().toLowerCase(Locale.ROOT);
 
@@ -582,12 +566,14 @@ public class MiscPlayerManager {
 
 
 
-    public static void learnAbility(Player player, Rpg rpg, AbilityType ability) {
+    public static void learnAbility(Player player, AbilityType ability) {
+        Rpg rpg = Rpg.getRpg();
+
         YamlConfiguration modifyYaml = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
 
         player.sendMessage(ChatColor.WHITE + "You have learned new ability: " + ChatColor.AQUA + ability.getName());
 
-        ArrayList<AbilityType> abilities = MiscPlayerManager.getAbilities(player,rpg);
+        ArrayList<AbilityType> abilities = MiscPlayerManager.getAbilities(player);
 
         if(!abilities.contains(ability)) {
             ArrayList<String> abilitiesList = (ArrayList<String>) modifyYaml.getStringList("abilities");
@@ -647,15 +633,15 @@ public class MiscPlayerManager {
         return false;
     }
 
-    public static void tempClearInventory(Rpg rpg, Player player) {
-        savePlayerInventory(player,rpg);
-        saveLocationToFile(player,rpg);
+    public static void tempClearInventory(Player player) {
+        savePlayerInventory(player);
+        saveLocationToFile(player);
 
         player.getInventory().clear();
     }
 
-    public static boolean getSneakAbilitySetting(Rpg rpg, Player player) {
-        YamlConfiguration yamlConfiguration = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
+    public static boolean getSneakAbilitySetting(Player player) {
+        YamlConfiguration yamlConfiguration = Rpg.getRpg().getConnectListener().getPlayerDataInstance(player).getModifyYaml();
 
         String path = "ability_config.sneak_ability_mode";
         if(yamlConfiguration.contains(path)) {
@@ -664,8 +650,8 @@ public class MiscPlayerManager {
         return true;
     }
 
-    public static boolean getAutoCastSetting(Rpg rpg, Player player) {
-        YamlConfiguration yamlConfiguration = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
+    public static boolean getAutoCastSetting(Player player) {
+        YamlConfiguration yamlConfiguration = Rpg.getRpg().getConnectListener().getPlayerDataInstance(player).getModifyYaml();
 
         String path = "ability_config.auto_cast";
         if(yamlConfiguration.contains(path)) {
@@ -674,8 +660,8 @@ public class MiscPlayerManager {
         return false;
     }
 
-    public static void setAutoCastSetting(Rpg rpg, Player player, boolean value) {
-        YamlConfiguration yamlConfiguration = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
+    public static void setAutoCastSetting(Player player, boolean value) {
+        YamlConfiguration yamlConfiguration = Rpg.getRpg().getConnectListener().getPlayerDataInstance(player).getModifyYaml();
 
         String path = "ability_config.auto_cast";
         if(yamlConfiguration.contains(path)) {
@@ -683,15 +669,15 @@ public class MiscPlayerManager {
         }
         yamlConfiguration.set(path,value);
         try {
-            yamlConfiguration.save(rpg.getConnectListener().getPlayerDataInstance(player).getYamlFile());
+            yamlConfiguration.save(Rpg.getRpg().getConnectListener().getPlayerDataInstance(player).getYamlFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    public static void setSneakAbilitySetting(Rpg rpg, Player player, boolean value) {
-        YamlConfiguration yamlConfiguration = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
+    public static void setSneakAbilitySetting(Player player, boolean value) {
+        YamlConfiguration yamlConfiguration = Rpg.getRpg().getConnectListener().getPlayerDataInstance(player).getModifyYaml();
 
         String path = "ability_config.sneak_ability_mode";
         if(!yamlConfiguration.contains(path)) {
@@ -700,14 +686,14 @@ public class MiscPlayerManager {
         yamlConfiguration.set(path,value);
 
         try {
-            yamlConfiguration.save(rpg.getConnectListener().getPlayerDataInstance(player).getYamlFile());
+            yamlConfiguration.save(Rpg.getRpg().getConnectListener().getPlayerDataInstance(player).getYamlFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void setLightsaberRightClickToggleSetting(Rpg rpg, Player player, boolean value) {
-        YamlConfiguration yamlConfiguration = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
+    public static void setLightsaberRightClickToggleSetting(Player player, boolean value) {
+        YamlConfiguration yamlConfiguration = Rpg.getRpg().getConnectListener().getPlayerDataInstance(player).getModifyYaml();
 
         String path = "ability_config.right_click_lightsaber_toggle_mode";
         if(!yamlConfiguration.contains(path)) {
@@ -716,14 +702,14 @@ public class MiscPlayerManager {
         yamlConfiguration.set(path,value);
 
         try {
-            yamlConfiguration.save(rpg.getConnectListener().getPlayerDataInstance(player).getYamlFile());
+            yamlConfiguration.save(Rpg.getRpg().getConnectListener().getPlayerDataInstance(player).getYamlFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static boolean getLightsaberRightClickToggleSetting(Rpg rpg, Player player) {
-        YamlConfiguration yamlConfiguration = rpg.getConnectListener().getPlayerDataInstance(player).getModifyYaml();
+    public static boolean getLightsaberRightClickToggleSetting(Player player) {
+        YamlConfiguration yamlConfiguration = Rpg.getRpg().getConnectListener().getPlayerDataInstance(player).getModifyYaml();
 
         String path = "ability_config.right_click_lightsaber_toggle_mode";
         if(yamlConfiguration.contains(path)) {

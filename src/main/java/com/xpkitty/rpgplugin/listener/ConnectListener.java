@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -78,7 +78,7 @@ public class ConnectListener implements Listener {
         }
 
         if(!playerData.containsKey(e.getPlayer().getUniqueId())) {
-            PlayerDataManager playerDataManager = new PlayerDataManager(e.getPlayer(),rpg,MiscPlayerManager.getCurrentPlayerProfile(rpg, e.getPlayer()));
+            PlayerDataManager playerDataManager = new PlayerDataManager(e.getPlayer(),rpg,MiscPlayerManager.getCurrentPlayerProfile(e.getPlayer()));
             playerData.put(e.getPlayer().getUniqueId(), playerDataManager);
         }
 
@@ -96,7 +96,7 @@ public class ConnectListener implements Listener {
         int exp = yamlConfiguration.getInt("experience");
         int level = yamlConfiguration.getInt("level");
 
-        ExperienceManager.setXpBar(rpg, e.getPlayer(), exp, level);
+        ExperienceManager.setXpBar(e.getPlayer(), exp, level);
 
         skinTest(e.getPlayer());
 
@@ -106,8 +106,8 @@ public class ConnectListener implements Listener {
         this.file = file;
         this.yamlConfiguration = yamlConfiguration;
 
-        MiscPlayerManager.loadPlayerLocation(e.getPlayer(),rpg);
-        MiscPlayerManager.loadPlayerInventory(e.getPlayer(),rpg);
+        MiscPlayerManager.loadPlayerLocation(e.getPlayer());
+        MiscPlayerManager.loadPlayerInventory(e.getPlayer());
 
         try {
             if(useSQL) {
@@ -131,8 +131,8 @@ public class ConnectListener implements Listener {
 
         rpg.getSpellHotbarManager().deadctivateSpellHotbar(e.getPlayer());
 
-        MiscPlayerManager.saveLocationToFile(e.getPlayer(), rpg);
-        MiscPlayerManager.savePlayerInventory(e.getPlayer(), rpg);
+        MiscPlayerManager.saveLocationToFile(e.getPlayer());
+        MiscPlayerManager.savePlayerInventory(e.getPlayer());
 
         playerSkinData.remove(e.getPlayer().getUniqueId());
         playerData.remove(e.getPlayer().getUniqueId());
@@ -156,10 +156,10 @@ public class ConnectListener implements Listener {
             skinData.activateSkin("default");
         }
 
-        MiscPlayerManager.savePlayerInventory(player,rpg);
-        MiscPlayerManager.saveLocationToFile(player,rpg);
+        MiscPlayerManager.savePlayerInventory(player);
+        MiscPlayerManager.saveLocationToFile(player);
 
-        PlayerDataManager playerDataManager = new PlayerDataManager(player,rpg,MiscPlayerManager.getCurrentPlayerProfile(rpg, player));
+        PlayerDataManager playerDataManager = new PlayerDataManager(player,rpg,MiscPlayerManager.getCurrentPlayerProfile(player));
         playerData.put(player.getUniqueId(), playerDataManager);
         playerProfileData.put(player.getUniqueId(), new ProfileManager(player,rpg));
         playerSkinData.put(player.getUniqueId(), new PlayerSkinFile(player,rpg));
@@ -173,7 +173,7 @@ public class ConnectListener implements Listener {
         int exp = yamlConfiguration.getInt("experience");
         int level = yamlConfiguration.getInt("level");
 
-        ExperienceManager.setXpBar(rpg, player, exp, level);
+        ExperienceManager.setXpBar(player, exp, level);
 
         com.xpkitty.rpgplugin.manager.MiscPlayerManager miscPlayerManager = new MiscPlayerManager();
         miscPlayerManager.testResourcePack(player,rpg,player.getWorld(),getPlayerDataInstance(player));
@@ -181,8 +181,8 @@ public class ConnectListener implements Listener {
         this.file = file;
         this.yamlConfiguration = yamlConfiguration;
 
-        MiscPlayerManager.loadPlayerLocation(player,rpg);
-        MiscPlayerManager.loadPlayerInventory(player,rpg);
+        MiscPlayerManager.loadPlayerLocation(player);
+        MiscPlayerManager.loadPlayerInventory(player);
 
         try {
             if(useSQL) {

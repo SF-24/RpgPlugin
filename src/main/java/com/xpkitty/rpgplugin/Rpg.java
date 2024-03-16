@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -26,12 +26,14 @@ import com.xpkitty.rpgplugin.command.tabcompleter.*;
 import com.xpkitty.rpgplugin.listener.*;
 import com.xpkitty.rpgplugin.manager.MiscPlayerManager;
 import com.xpkitty.rpgplugin.manager.PlayerLevelManager;
+import com.xpkitty.rpgplugin.manager.betonquest.BetonQuestManager;
 import com.xpkitty.rpgplugin.manager.data.ConfigManager;
 import com.xpkitty.rpgplugin.manager.data.HogwartsDataManager;
 import com.xpkitty.rpgplugin.manager.data.database_data.DatabaseConfigManager;
 import com.xpkitty.rpgplugin.manager.data.database_data.DatabaseManager;
 import com.xpkitty.rpgplugin.manager.data.player_settings.settings_manager.SettingsManager;
 import com.xpkitty.rpgplugin.manager.data.spell_data.MainSpellData;
+import com.xpkitty.rpgplugin.manager.economy.VaultCompatibilityManager;
 import com.xpkitty.rpgplugin.manager.hogwarts.HogwartsHouseManager;
 import com.xpkitty.rpgplugin.manager.hogwarts.HogwartsHouseMathManager;
 import com.xpkitty.rpgplugin.manager.hud.EnergyManager;
@@ -43,6 +45,7 @@ import com.xpkitty.rpgplugin.manager.player_groups.guilds.GuildManager;
 import com.xpkitty.rpgplugin.manager.spells.shield.ShieldManager;
 import com.xpkitty.rpgplugin.manager.spells.spell_learning.SpellLearnManager;
 import com.xpkitty.rpgplugin.manager.spells.spell_ui.SpellHotbarManager;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -56,9 +59,11 @@ import java.util.List;
 
 public final class Rpg extends JavaPlugin {
 
+    private static Rpg mainClass;
+
     public ShieldManager shieldManager = new ShieldManager();
     private final SettingsManager settingsManager = new SettingsManager(this);
-    private ConfigManager configManager = new ConfigManager();
+    private final ConfigManager configManager = new ConfigManager();
     ConnectListener connectListener;
     ClickListener clickListener;
     PlayerLevelManager playerLevelManager;
@@ -71,10 +76,14 @@ public final class Rpg extends JavaPlugin {
     DatabaseConfigManager databaseConfigManager = new DatabaseConfigManager(this);
     DatabaseManager databaseManager;
     SpellHotbarManager spellHotbarManager = new SpellHotbarManager(this);
+    VaultCompatibilityManager vaultCompatibilityManager = new VaultCompatibilityManager();
+    BetonQuestManager betonQuestManager = new BetonQuestManager();
 
 
     @Override
     public void onEnable() {
+
+        mainClass=this;
 
         if(getDatabaseConfigManager().getDatabaseYamlConfiguration().getBoolean("use_sql")) {
             try {
@@ -167,8 +176,8 @@ public final class Rpg extends JavaPlugin {
             player.closeInventory();
             spellHotbarManager.deadctivateSpellHotbar(player);
 
-            MiscPlayerManager.savePlayerInventory(player, this);
-            MiscPlayerManager.saveLocationToFile(player, this);
+            MiscPlayerManager.savePlayerInventory(player);
+            MiscPlayerManager.saveLocationToFile(player);
 
             player.kickPlayer("Server is being reloaded or stopped!");
             if(getDatabaseConfigManager().getDatabaseYamlConfiguration().getBoolean("use_sql")) {
@@ -219,6 +228,8 @@ public final class Rpg extends JavaPlugin {
 
     public SettingsManager getSettingsManager() {return settingsManager;}
 
+    public VaultCompatibilityManager getVaultCompatibilityManager() {return vaultCompatibilityManager;}
+
     public void mapSpellPattern(List<Integer> pattern, Player player, Vector dir) {
         System.out.println("");
         System.out.println("EXECUTING TEST RUN SPELL");
@@ -229,6 +240,7 @@ public final class Rpg extends JavaPlugin {
         SpellLearnManager.loadCastTest(this,player,pattern,dir,false);
     }
 
+    public BetonQuestManager getBetonQuestManager() {return betonQuestManager;}
 
     public boolean isInHouse(Player player) {
         return HogwartsHouseManager.getHogwartsHouse(this, player) != null;
@@ -246,4 +258,12 @@ public final class Rpg extends JavaPlugin {
             HogwartsHouseMathManager.addHousePoints(this, player, null, amount);
         }
     }
+
+    public Economy getEconomy() {
+        return vaultCompatibilityManager.getEconomy();
+    }
+
+    public static Rpg getRpg() {return mainClass;}
+
+    public static boolean useBetonQuest() {return getRpg().getBetonQuestManager().useBetonQuest();}
 }

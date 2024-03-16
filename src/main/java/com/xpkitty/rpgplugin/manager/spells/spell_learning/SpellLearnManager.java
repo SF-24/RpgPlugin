@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -177,8 +177,8 @@ public class SpellLearnManager {
 
 
             //player INT and WIS modifier
-            int primarySpellCastingMod = MiscPlayerManager.getAbilityScoreModifier(rpg,player,PlayerSkills.SPELL_CASTING.getBaseAbilityScore());
-            int secondarySpellCastingMod = MiscPlayerManager.getAbilityScoreModifier(rpg,player,PlayerSkills.SPELL_CASTING.getSecondaryAbilityScore());
+            int primarySpellCastingMod = MiscPlayerManager.getAbilityScoreModifier(player,PlayerSkills.SPELL_CASTING.getBaseAbilityScore());
+            int secondarySpellCastingMod = MiscPlayerManager.getAbilityScoreModifier(player,PlayerSkills.SPELL_CASTING.getSecondaryAbilityScore());
 
             //if player has learned spell
             boolean learnedSpell = yamlConfiguration.getBoolean(path1+".learned");
@@ -366,11 +366,11 @@ public class SpellLearnManager {
         int learnDifficulty = 0;
 
         //player INT and WIS modifier
-        int primarySpellCastingMod = MiscPlayerManager.getAbilityScoreModifier(rpg,player,PlayerSkills.SPELL_CASTING.getBaseAbilityScore());
-        int secondarySpellCastingMod = MiscPlayerManager.getAbilityScoreModifier(rpg,player,PlayerSkills.SPELL_CASTING.getSecondaryAbilityScore());
+        int primarySpellCastingMod = MiscPlayerManager.getAbilityScoreModifier(player,PlayerSkills.SPELL_CASTING.getBaseAbilityScore());
+        int secondarySpellCastingMod = MiscPlayerManager.getAbilityScoreModifier(player,PlayerSkills.SPELL_CASTING.getSecondaryAbilityScore());
 
         //player spell-casting skill
-        int playerSpellCastingSkillMod = PlayerSkillManager.getPlayerSkillMod(rpg, player, PlayerSkills.SPELL_CASTING);
+        int playerSpellCastingSkillMod = PlayerSkillManager.getPlayerSkillMod(player, PlayerSkills.SPELL_CASTING);
 
         // Set variables - varies if spell is hard coded or not
         if(isHardCoded) {

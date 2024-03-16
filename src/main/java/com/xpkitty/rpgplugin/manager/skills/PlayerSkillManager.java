@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -26,17 +26,31 @@ import org.bukkit.entity.Player;
 
 public class PlayerSkillManager {
 
-    public static int getPlayerSkillLevel(Rpg rpg, Player player, PlayerSkills skill) {
+    public static void givePlayerSkillExp(Player player, PlayerSkills skill, int amount) {
+        Rpg rpg = Rpg.getRpg();
+        NewDataReader newDataReader = new NewDataReader(player,rpg);
+        newDataReader.addXp(player,skill,amount);
+    }
+
+    public static int getPlayerSkillLevel(Player player, PlayerSkills skill) {
+        Rpg rpg = Rpg.getRpg();
         return new NewDataReader(player,rpg).loadData(rpg,player).getSkillLevel(skill);
     }
 
-    public static int getPlayerSkillExp(Rpg rpg, Player player, PlayerSkills skill) {
+    public static int getPlayerSkillExp(Player player, PlayerSkills skill) {
+        Rpg rpg = Rpg.getRpg();
+
         return new NewDataReader(player,rpg).loadData(rpg,player).getSkillXp(skill);
     }
 
-    public static int getPlayerSkillMod(Rpg rpg, Player player, PlayerSkills skill) {
-        int level = getPlayerSkillLevel(rpg,player,skill);
-        int v = MiscPlayerManager.calculateAbilityScoreModifier(level+10);
-        return v;
+    public static int getPlayerSkillMod(Player player, PlayerSkills skill) {
+        int level = getPlayerSkillLevel(player,skill);
+        return MiscPlayerManager.calculateAbilityScoreModifier(level+10);
+    }
+
+    public static java.util.Set<PlayerSkills> getPlayerSkillList(Player player) {
+        Rpg rpg = Rpg.getRpg();
+        NewDataReader newDataReader = new NewDataReader(player,rpg);
+        return newDataReader.loadData(rpg,player).getSkillMap().keySet();
     }
 }

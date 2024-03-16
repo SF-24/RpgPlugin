@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -341,8 +341,8 @@ public class GenericSpellRunnable extends BukkitRunnable {
                                 if(target instanceof Player) {
                                     Player targetPlayer = (Player) target;
 
-                                    int STR = MiscPlayerManager.getAbilityScoreModifier(rpg,targetPlayer, AbilityScores.STR);
-                                    int CON = MiscPlayerManager.getAbilityScoreModifier(rpg,targetPlayer, AbilityScores.CON);
+                                    int STR = MiscPlayerManager.getAbilityScoreModifier(targetPlayer, AbilityScores.STR);
+                                    int CON = MiscPlayerManager.getAbilityScoreModifier(targetPlayer, AbilityScores.CON);
 
                                     mod += STR + CON;
                                 }

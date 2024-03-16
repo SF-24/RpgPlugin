@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ public class MenuCommand implements CommandExecutor {
         if(sender instanceof Player) {
             Player player = (Player) sender;
             if(args.length == 0) {
-                UIManager.openMenu(player,rpg);
+                UIManager.openMenu(player);
             } else {
                 player.sendMessage(ChatColor.RED + "ERROR! Too many arguments!");
             }

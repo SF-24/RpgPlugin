@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.world.WorldSaveEvent;
-import org.bukkit.inventory.InventoryView;
 
 public class ServerListener implements Listener {
     Rpg rpg;
@@ -38,9 +37,9 @@ public class ServerListener implements Listener {
     @EventHandler
     public void onWorldSave(WorldSaveEvent e) {
         for(Player player : rpg.getServer().getOnlinePlayers()) {
-            MiscPlayerManager.saveLocationToFile(player, rpg);
+            MiscPlayerManager.saveLocationToFile(player);
             if(!player.getOpenInventory().getType().equals(InventoryType.CHEST)) {
-                MiscPlayerManager.savePlayerInventory(player, rpg);
+                MiscPlayerManager.savePlayerInventory(player);
             }
         }
         System.out.println();

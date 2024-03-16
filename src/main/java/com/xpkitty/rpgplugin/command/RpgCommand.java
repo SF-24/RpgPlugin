@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@ package com.xpkitty.rpgplugin.command;
 import com.xpkitty.rpgplugin.Rpg;
 import com.xpkitty.rpgplugin.manager.MiscPlayerManager;
 import com.xpkitty.rpgplugin.manager.skills.morph.MorphPlayer;
-import com.xpkitty.rpgplugin.manager.skin.SkinManager;
 import com.xpkitty.rpgplugin.manager.data.player_data.PlayerSkinFile;
 import com.xpkitty.rpgplugin.manager.hogwarts.HogwartsHouseList;
 import com.xpkitty.rpgplugin.manager.hogwarts.HogwartsHouseManager;
@@ -30,15 +29,12 @@ import com.xpkitty.rpgplugin.manager.hogwarts.HogwartsHouseMathManager;
 import com.xpkitty.rpgplugin.manager.player_class.abilities.AbilityType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
@@ -48,7 +44,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.UUID;
 
 public class RpgCommand implements CommandExecutor {
 
@@ -101,10 +96,10 @@ public class RpgCommand implements CommandExecutor {
 
             } else if(args.length==2 && args[0].equalsIgnoreCase("set_ability_sneak_setting")) {
                 if(args[1].equalsIgnoreCase("true")) {
-                    MiscPlayerManager.setSneakAbilitySetting(rpg,player,true);
+                    MiscPlayerManager.setSneakAbilitySetting(player,true);
                     player.sendMessage("Set ability sneak setting to true");
                 } else if(args[1].equalsIgnoreCase("false")) {
-                    MiscPlayerManager.setSneakAbilitySetting(rpg,player,false);
+                    MiscPlayerManager.setSneakAbilitySetting(player,false);
                     player.sendMessage("Set ability sneak setting to false");
                 } else {
                     player.sendMessage(ChatColor.RED + "Please specify TRUE or FALSE");
@@ -127,10 +122,10 @@ public class RpgCommand implements CommandExecutor {
             } else if(args.length==2 && args[0].equalsIgnoreCase("set_lightsaber_right_click_eject_setting")) {
 
                 if(args[1].equalsIgnoreCase("true")) {
-                    MiscPlayerManager.setLightsaberRightClickToggleSetting(rpg,player,true);
+                    MiscPlayerManager.setLightsaberRightClickToggleSetting(player,true);
                 } else if(args[1].equalsIgnoreCase("false")) {
-                    MiscPlayerManager.setLightsaberRightClickToggleSetting(rpg,player,false);
-                    MiscPlayerManager.setLightsaberRightClickToggleSetting(rpg,player,false);
+                    MiscPlayerManager.setLightsaberRightClickToggleSetting(player,false);
+                    MiscPlayerManager.setLightsaberRightClickToggleSetting(player,false);
                 } else {
                     player.sendMessage(ChatColor.RED + "Error! Join the Dark Side or specify a boolean.");
                 }
@@ -138,9 +133,9 @@ public class RpgCommand implements CommandExecutor {
             } else if(args.length==2 && args[0].equalsIgnoreCase("set_auto_cast")) {
 
                 if(args[1].equalsIgnoreCase("true")) {
-                    MiscPlayerManager.setAutoCastSetting(rpg,player,true);
+                    MiscPlayerManager.setAutoCastSetting(player,true);
                 } else if(args[1].equalsIgnoreCase("false")) {
-                    MiscPlayerManager.setAutoCastSetting(rpg,player,false);
+                    MiscPlayerManager.setAutoCastSetting(player,false);
                 } else {
                     player.sendMessage(ChatColor.RED + "Error! Join the Death Eaters or specify a boolean.");
                 }
@@ -357,7 +352,7 @@ public class RpgCommand implements CommandExecutor {
 
                         for(AbilityType ability : AbilityType.values()) {
                             if(args[2].equalsIgnoreCase(ability.name().toLowerCase(Locale.ROOT))) {
-                                MiscPlayerManager.learnAbility(player,rpg, ability);
+                                MiscPlayerManager.learnAbility(player, ability);
                             }
                         }
 
@@ -367,7 +362,7 @@ public class RpgCommand implements CommandExecutor {
 
                         player.sendMessage(ChatColor.WHITE + "You have unlearned ability: " + ChatColor.AQUA + abilityType.getName());
 
-                        ArrayList<AbilityType> abilities = MiscPlayerManager.getAbilities(player,rpg);
+                        ArrayList<AbilityType> abilities = MiscPlayerManager.getAbilities(player);
                         for(AbilityType ability : AbilityType.values()) {
                             if(abilities.contains(ability) && ability.name().equalsIgnoreCase(abilityString)) {
                                 ArrayList<String> abilitiesList = (ArrayList<String>) modifyYaml.getStringList("abilities");
