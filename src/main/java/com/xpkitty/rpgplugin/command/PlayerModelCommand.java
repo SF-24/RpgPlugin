@@ -43,8 +43,12 @@ public class PlayerModelCommand implements CommandExecutor {
                 if(args.length==1) {
                     if(args[0].equalsIgnoreCase("add")) {
                         PlayerPart.clearPlayerPart(player);
+                        // TODO: add parts
+
                     } else if(args[0].equalsIgnoreCase("remove") || args[0].equalsIgnoreCase("rem")) {
                         PlayerPart.clearPlayerPart(player);
+                        // TODO: add part removing
+
                     } else {
                         player.sendMessage(ChatColor.RED + "USAGE: /player_model <add|remove>");
                     }

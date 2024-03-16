@@ -5,6 +5,7 @@ api-version: 1.19
 authors: [ XpKitty ]
 description: Another RPG plugin
 depend: [ AriKeys ]
+softdepend: [ BetonQuest ]
 website: xpkc.wordpress.com
 commands:
   achievements:
@@ -39,7 +40,7 @@ commands:
     description: Command for changing game profile
     aliases: [ profiles, character, char ]
   rpg:
-    description: Useful command for managin the plugin
+    description: Useful command for managin the plugin, used for controlling most of the functionality
     permission: rpgpl.rpg
     permission-message: You do not have permission to use this command!
   setskill:

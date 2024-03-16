@@ -32,7 +32,7 @@ import java.util.Collections;
 public class GuildBanner {
 
     ItemStack banner;
-    BannerMeta bannerMeta;
+    BannerMeta bannerMeta   ;
 
     ArrayList<Material> banners = new ArrayList<>();
 

@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -109,14 +109,14 @@ public class DamageListener implements Listener {
             // IF DAMAGER IS HUMAN ENTITY
             HumanEntity damager = (HumanEntity) e.getDamager();
             float cooldown = damager.getAttackCooldown();
-            if(cooldown==1.0) {
+            if(cooldown>=1.0) {
                 double damage = e.getDamage()*1.1;
                 e.setDamage(damage);
 
                 //update velocity (knockback)
                 Vector playerDir = e.getEntity().getLocation().getDirection();
                 playerDir.multiply(-1);
-                playerDir.multiply(0.7);
+                playerDir.multiply(0.3);// lowered velocity
                 playerDir.multiply(knockBackResistanceValue);
 
                 Vector velocity = e.getEntity().getVelocity().add(playerDir);

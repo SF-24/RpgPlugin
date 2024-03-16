@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -20,8 +20,8 @@
 package com.xpkitty.rpgplugin.command;
 
 import com.xpkitty.rpgplugin.Rpg;
+import com.xpkitty.rpgplugin.manager.data.guild_data.GuildDataClass;
 import com.xpkitty.rpgplugin.manager.data.guild_data.GuildDataReader;
-import com.xpkitty.rpgplugin.manager.player_groups.guilds.Guild;
 import com.xpkitty.rpgplugin.manager.player_groups.guilds.GuildManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -30,7 +30,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class GuildCommand implements CommandExecutor {
     Rpg rpg;
@@ -47,7 +46,7 @@ public class GuildCommand implements CommandExecutor {
         } else {
             Player player = (Player) sender;
 
-                // ARGS = 0
+            // ARGS = 0
             if((args.length ==0)) {
                 sendCommandSyntax(player);
 
@@ -74,13 +73,13 @@ public class GuildCommand implements CommandExecutor {
                         }
                     }
 
-                // OPEN GUILD MENU
+                    // OPEN GUILD MENU
                 } else if(args[0].equalsIgnoreCase("menu")) {
                     player.sendMessage("Guild menu is on the //todo list");
                     // TODO guild menu
 
 
-                // SHOW GUILD INFO
+                    // SHOW GUILD INFO
                 } else if(args[0].equalsIgnoreCase("info")) {
                     player.sendMessage("Guild info is on the //todo list");
                     // TODO guild info
@@ -90,31 +89,63 @@ public class GuildCommand implements CommandExecutor {
                 }
                 // ARGS >1
             } else {
-                 if(args[0].equalsIgnoreCase("create")) {
-                     if(GuildManager.getPlayerGuildCount(rpg,player) < rpg.getGuildConfig().getMaxGuildsPerPlayer()) {
-                         String guildName = "";
-                         int guildNameSize = 0;
+                if(args[0].equalsIgnoreCase("create")) {
+                    if(GuildManager.getPlayerGuildCount(rpg,player) < rpg.getGuildConfig().getMaxGuildsPerPlayer()) {
+                        String guildName = "";
+                        int guildNameSize = 0;
 
-                         for(String arg : args) {
-                             if(!arg.equalsIgnoreCase("create")) {
-                                 if(guildNameSize == 0) {
-                                     guildName = arg;
-                                 } else {
-                                     guildName = guildName + " " + arg;
-                                 }
-                                 guildNameSize++;
-                             }
-                         }
+                        for(String arg : args) {
+                            if(!arg.equalsIgnoreCase("create")) {
+                                if(guildNameSize == 0) {
+                                    guildName = arg;
+                                } else {
+                                    guildName = guildName + " " + arg;
+                                }
+                                guildNameSize++;
+                            }
+                        }
 
-                         guildName = guildName.substring(0, 1).toUpperCase() + guildName.substring(1);
+                        guildName = guildName.substring(0, 1).toUpperCase() + guildName.substring(1);
 
-                         GuildManager.createGuild(rpg,player,guildName);
-                     } else {
-                         player.sendMessage(ChatColor.RED + "You have reached limit of guilds you can be in at once (" + rpg.getGuildConfig().getMaxGuildsPerPlayer() + " guilds)");
-                     }
+                        GuildManager.createGuild(rpg,player,guildName);
+                    } else {
+                        player.sendMessage(ChatColor.RED + "You have reached the guild limit." + ChatColor.WHITE + " You can only be in " + ChatColor.GOLD + rpg.getGuildConfig().getMaxGuildsPerPlayer() + ChatColor.WHITE + " guilds at once)");
+                    }
 
+                } else if(args[0].equalsIgnoreCase("join")) {
+                    int id = -1;
+                    try {
+                        id = Integer.parseInt(args[1]);
+                    } catch (NumberFormatException e) {
+                        player.sendMessage(ChatColor.RED + "The specified guild id is not a number.");
+                        player.sendMessage(ChatColor.RED + "syntax: /guild join <guildId>");
+                        return false;
+                    }
 
-                 } else if(args[0].equalsIgnoreCase("join")) {
+                    if(args.length>2) {
+                        player.sendMessage(ChatColor.RED + "You have specified too many parameters");
+                        player.sendMessage(ChatColor.RED + "syntax: /guild join <guildId>");
+                    }
+
+                    // check if id does not exist
+                    if(!GuildManager.getGuildList(rpg).contains(id)) {
+                        player.sendMessage(ChatColor.RED + "The specified guild id does not exist.");
+                        player.sendMessage(ChatColor.RED+"Use "+ChatColor.GOLD+"\"/guild list\""+ChatColor.RED+" to view a list of guilds.");
+                        return false;
+                    }
+
+                    if(GuildManager.isPlayerInGuild(rpg,id,player.getUniqueId())) {
+                        player.sendMessage(ChatColor.RED + "You are already a member of this guild");
+                        return false;
+                    }
+
+                    if(GuildManager.getPlayerGuildCount(rpg,player) >= rpg.getGuildConfig().getMaxGuildsPerPlayer()) {
+                        player.sendMessage(ChatColor.RED + "You have reached the guild limit." + ChatColor.WHITE + " You can only be in " + ChatColor.GOLD + rpg.getGuildConfig().getMaxGuildsPerPlayer() + ChatColor.WHITE + " guilds at once)");
+                        return false;
+                    }
+
+                    GuildManager.sendJoinRequest(rpg,id,player);
+
                     player.sendMessage("COMING SOON!");
                     //TODO guild joining
 
@@ -150,16 +181,16 @@ public class GuildCommand implements CommandExecutor {
 
 
                     //GUILD INFO ABOUT CERTAIN GUILD BY ID
-                 } else if(args[0].equalsIgnoreCase("info")) {
-                     player.sendMessage("COMING SOON!");
+                } else if(args[0].equalsIgnoreCase("info")) {
+                    player.sendMessage("COMING SOON!");
 
-                     int id = -1;
+                    int id = -1;
 
-                     try {
-                         id = Integer.parseInt(args[1]);
-                     } catch (Exception e) {
-                         player.sendMessage(ChatColor.RED + "Usage: /guild info <guild id>");
-                     }
+                    try {
+                        id = Integer.parseInt(args[1]);
+                    } catch (Exception e) {
+                        player.sendMessage(ChatColor.RED + "Usage: /guild info <guild id>");
+                    }
 
                      /*
                      if(id>-1) {
@@ -187,7 +218,7 @@ public class GuildCommand implements CommandExecutor {
                              player.sendMessage(ChatColor.RED + "You can only be in " + maxGuildCount + " guilds at once");
                          }
                      }*/
-                 }
+                }
             }
         }
 

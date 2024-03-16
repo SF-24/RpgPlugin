@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -20,12 +20,15 @@
 package com.xpkitty.rpgplugin.manager.player_groups.guilds;
 
 import com.xpkitty.rpgplugin.Rpg;
+import com.xpkitty.rpgplugin.manager.data.guild_data.GuildDataClass;
 import com.xpkitty.rpgplugin.manager.data.guild_data.GuildDataReader;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class GuildManager {
@@ -41,26 +44,66 @@ public class GuildManager {
         }
     }
 
-    public void loadGuild(Integer id) {
-        GuildDataReader guildDataReader = new GuildDataReader(rpg,id);
-        System.out.println("[RpgPlugin] Guild " + id + " has been loaded");
-    }
-/*
-    public Guild getGuildInstance(Integer id) {
-        if (guilds.containsKey(id)) {
-            return guilds.get(id);
+    public static void sendJoinRequest(Rpg rpg, int id, Player player) {
+
+        if(isGuildOpen(rpg,id)) {
+            addMemberToGuild(rpg,id,player);
+        } else {
+            player.sendMessage(ChatColor.AQUA + "The guild you are trying to join is not public");
+            player.sendMessage(ChatColor.WHITE + "A join request has been sent.");
+            sendJoinRequestToClosedGuild(rpg, id, player);
         }
-        return null;
     }
-*/
+
+    public static void sendJoinRequestToClosedGuild(Rpg rpg, int id, Player player) {
+        GuildDataClass guildData = getGuildFile(rpg,id);
+        guildData.sendJoinRequest(player.getUniqueId());
+        saveGuildFile(rpg,guildData,id);
+    }
+
+    public static void addMemberToGuild(Rpg rpg, int id, Player player)
+    {
+        GuildDataClass guildData = getGuildFile(rpg,id);
+        guildData.addMember(player.getUniqueId());
+        saveGuildFile(rpg, guildData, id);
+    }
+
+    public static boolean isGuildOpen(Rpg rpg, int id) {
+        return getGuildFile(rpg,id).isOpen();
+    }
+
+
+    // Check if a player is in a specific guild
+    public static boolean isPlayerInGuild(Rpg rpg, Integer id, UUID playerUUID) {
+        if(getGuildList(rpg).contains(id)) {
+            return loadGuildAndReturn(rpg,id).loadData(rpg, id).isMember(playerUUID);
+        }
+        return false;
+    }
+
+    // create a guild
     public static void createGuild(Rpg rpg, Player player, String name) {
         int id = rpg.getGuildConfig().getGuildNum(true);
 
         GuildDataReader guildDataReader = new GuildDataReader(rpg, id);
         guildDataReader.setup(id, name, player.getUniqueId());
-
     }
 
+    // get the amount of guilds a player is in
+    public static int getPlayerGuildCount(Rpg rpg, Player player) {
+        int count = 0;
+
+        for(Integer id : getGuildList(rpg)) {
+            if(GuildManager.isPlayerInGuild(rpg,id,player.getUniqueId())) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+
+
+    // get a list of guild ids
     public static ArrayList<Integer> getGuildList(Rpg rpg) {
         ArrayList<Integer> guilds = new ArrayList<>();
 
@@ -82,14 +125,35 @@ public class GuildManager {
         return guilds;
     }
 
+    public static GuildDataClass getGuildFile(Rpg rpg, int id) {
+        return GuildManager.loadGuildAndReturn(rpg,id).loadData(rpg, id);
+    }
 
-    public static int getPlayerGuildCount(Rpg rpg, Player player) {
-        return 0;
+    public static void saveGuildFile(Rpg rpg, GuildDataClass guildData, int id) {
+        GuildDataReader guildDataReader = GuildManager.loadGuildAndReturn(rpg,id);
+        guildDataReader.saveFile(guildData,id);
     }
 
     public static String trimFileExtension(String str) {
         return str.substring(0, str.lastIndexOf('.'));
     }
+
+
+
+
+    // load a guild
+    public void loadGuild(Integer id) {
+        GuildDataReader guildDataReader = new GuildDataReader(rpg,id);
+        System.out.println("[RpgPlugin] Guild " + id + " has been loaded");
+    }
+
+    // load a guild and return a value
+    public static GuildDataReader loadGuildAndReturn(Rpg rpg, Integer id) {
+        GuildDataReader guildDataReader = new GuildDataReader(rpg,id);
+        System.out.println("[RpgPlugin] Guild " + id + " has been loaded");
+        return guildDataReader;
+    }
+
 }
 
 

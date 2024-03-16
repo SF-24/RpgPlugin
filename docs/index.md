@@ -6,6 +6,7 @@
 /rpg
 Perm: [OP]
 rpgpl.rpg
+Main command of the plugin
 
 /getitem
 Perm: [OP]
