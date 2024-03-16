@@ -1,7 +1,7 @@
 # AnotherRpgPlugin
 
 Minecraft java edition plugin. Made for spigot, compatible with spigot forks.
-Tested with spigot 1.19.3 and PaperMc 1.19.3
+Tested with spigot 1.19.3 and PaperMc 1.19.3 and 1.20.2
 
 Build with Maven.
 
