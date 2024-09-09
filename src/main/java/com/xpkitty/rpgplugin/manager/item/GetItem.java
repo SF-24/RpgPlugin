@@ -1,5 +1,5 @@
 /*
- *     Copyright (C) 2023 Sebastian Frynas
+ *     Copyright (C) 2024 Sebastian Frynas
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -67,6 +67,31 @@ public class GetItem {
 
 
         return itemStack;
+    }
+
+
+    public static ItemStack generateProceduralLoot() {
+        ItemStack itemStack = new ItemStack(Material.IRON_SWORD);
+
+        return itemStack;
+    }
+
+    public ItemStack generateCustomLoot() {
+        ItemStack itemStack = new ItemStack(Material.IRON_SWORD);
+
+        return itemStack;
+    }
+
+    public ItemStack generateRandomItem() {
+        ItemStack itemStack = new ItemStack(Material.IRON_SWORD);
+
+        return itemStack;
+    }
+
+    public LootType generateRandomLootType() {
+        LootType lootType = LootType.DEFAULT;
+
+        return lootType;
     }
 
 }

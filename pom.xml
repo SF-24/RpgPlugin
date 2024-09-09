@@ -103,6 +103,7 @@
     </repositories>
 
     <dependencies>
+        <!-- Spigot API -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
@@ -110,6 +111,7 @@
             <classifier>remapped-mojang</classifier>
             <scope>provided</scope>
         </dependency>
+        <!-- Armor equip event, bundled with the jar -->
         <dependency>
             <groupId>com.jeff_media</groupId>
             <artifactId>ArmorEquipEvent</artifactId>

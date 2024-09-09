@@ -39,50 +39,55 @@ public class GuildManager {
 
     public void loadGuilds() {
         System.out.println("[AnotherRpgPlugin] Loading guilds:");
-        for(int guild : GuildManager.getGuildList(rpg)) {
+        for(int guild : GuildManager.getGuildList()) {
             loadGuild(guild);
         }
     }
 
-    public static void sendJoinRequest(Rpg rpg, int id, Player player) {
+    public static void sendJoinRequest(int id, Player player) {
 
-        if(isGuildOpen(rpg,id)) {
-            addMemberToGuild(rpg,id,player);
+        Rpg rpg = Rpg.getRpg();
+
+        if(isGuildOpen(id)) {
+            addMemberToGuild(id,player);
         } else {
             player.sendMessage(ChatColor.AQUA + "The guild you are trying to join is not public");
             player.sendMessage(ChatColor.WHITE + "A join request has been sent.");
-            sendJoinRequestToClosedGuild(rpg, id, player);
+            sendJoinRequestToClosedGuild(id, player);
         }
     }
 
-    public static void sendJoinRequestToClosedGuild(Rpg rpg, int id, Player player) {
-        GuildDataClass guildData = getGuildFile(rpg,id);
+    public static void sendJoinRequestToClosedGuild(int id, Player player) {
+        Rpg rpg = Rpg.getRpg();
+        GuildDataClass guildData = getGuildFile(id);
         guildData.sendJoinRequest(player.getUniqueId());
-        saveGuildFile(rpg,guildData,id);
+        saveGuildFile(guildData,id);
     }
 
-    public static void addMemberToGuild(Rpg rpg, int id, Player player)
+    public static void addMemberToGuild(int id, Player player)
     {
-        GuildDataClass guildData = getGuildFile(rpg,id);
+        GuildDataClass guildData = getGuildFile(id);
         guildData.addMember(player.getUniqueId());
-        saveGuildFile(rpg, guildData, id);
+        saveGuildFile(guildData, id);
     }
 
-    public static boolean isGuildOpen(Rpg rpg, int id) {
-        return getGuildFile(rpg,id).isOpen();
+    public static boolean isGuildOpen(int id) {
+        return getGuildFile(id).isOpen();
     }
 
 
     // Check if a player is in a specific guild
-    public static boolean isPlayerInGuild(Rpg rpg, Integer id, UUID playerUUID) {
-        if(getGuildList(rpg).contains(id)) {
-            return loadGuildAndReturn(rpg,id).loadData(rpg, id).isMember(playerUUID);
+    public static boolean isPlayerInGuild(Integer id, UUID playerUUID) {
+        Rpg rpg = Rpg.getRpg();
+        if(getGuildList().contains(id)) {
+            return loadGuildAndReturn(id).loadData(rpg, id).isMember(playerUUID);
         }
         return false;
     }
 
     // create a guild
-    public static void createGuild(Rpg rpg, Player player, String name) {
+    public static void createGuild(Player player, String name) {
+        Rpg rpg = Rpg.getRpg();
         int id = rpg.getGuildConfig().getGuildNum(true);
 
         GuildDataReader guildDataReader = new GuildDataReader(rpg, id);
@@ -90,12 +95,12 @@ public class GuildManager {
     }
 
     // get the amount of guilds a player is in
-    public static int getPlayerGuildCount(Rpg rpg, Player player) {
+    public static int getPlayerGuildCount(Player player) {
         int count = 0;
 
-        if(getGuildList(rpg).size()>=1) {
-            for (Integer id : getGuildList(rpg)) {
-                if (GuildManager.isPlayerInGuild(rpg, id, player.getUniqueId())) {
+        if(getGuildList().size()>=1) {
+            for (Integer id : getGuildList()) {
+                if (GuildManager.isPlayerInGuild(id, player.getUniqueId())) {
                     count++;
                 }
             }
@@ -106,7 +111,7 @@ public class GuildManager {
 
 
     // get a list of guild ids
-    public static ArrayList<Integer> getGuildList(Rpg rpg) {
+    public static ArrayList<Integer> getGuildList() {
         ArrayList<Integer> guilds = new ArrayList<>();
 
         File dir = new File(GuildDataReader.getPath());
@@ -127,12 +132,13 @@ public class GuildManager {
         return guilds;
     }
 
-    public static GuildDataClass getGuildFile(Rpg rpg, int id) {
-        return GuildManager.loadGuildAndReturn(rpg,id).loadData(rpg, id);
+    public static GuildDataClass getGuildFile(int id) {
+        Rpg rpg = Rpg.getRpg();
+        return GuildManager.loadGuildAndReturn(id).loadData(rpg, id);
     }
 
-    public static void saveGuildFile(Rpg rpg, GuildDataClass guildData, int id) {
-        GuildDataReader guildDataReader = GuildManager.loadGuildAndReturn(rpg,id);
+    public static void saveGuildFile(GuildDataClass guildData, int id) {
+        GuildDataReader guildDataReader = GuildManager.loadGuildAndReturn(id);
         guildDataReader.saveFile(guildData,id);
     }
 
@@ -150,8 +156,8 @@ public class GuildManager {
     }
 
     // load a guild and return a value
-    public static GuildDataReader loadGuildAndReturn(Rpg rpg, Integer id) {
-        GuildDataReader guildDataReader = new GuildDataReader(rpg,id);
+    public static GuildDataReader loadGuildAndReturn(Integer id) {
+        GuildDataReader guildDataReader = new GuildDataReader(Rpg.getRpg(),id);
         System.out.println("[RpgPlugin] Guild " + id + " has been loaded");
         return guildDataReader;
     }

@@ -21,49 +21,28 @@
 package com.xpkitty.rpgplugin.manager.player_groups.guilds.ui;
 
 
+import com.xpkitty.rpgplugin.manager.item.ItemDataConverter;
+import com.xpkitty.rpgplugin.manager.item.ItemManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 public class GuildBanner {
 
-   // ItemStack banner;
-  //  BannerMeta bannerMeta;
-
-    ArrayList<Material> banners = new ArrayList<>();
+    String serialisedBanner;
 
     public GuildBanner() {
-   //     banner = new ItemStack(Material.WHITE_BANNER);
-  //      bannerMeta = (BannerMeta) banner.getItemMeta();
+        serialisedBanner = ItemDataConverter.encodeItemStackToBase64(new ItemStack(Material.WHITE_BANNER));
         updateBannerItem();
-
-        banners.add(Material.WHITE_BANNER);
-        banners.add(Material.BLACK_BANNER);
-        banners.add(Material.BLUE_BANNER);
-        banners.add(Material.RED_BANNER);
-        banners.add(Material.YELLOW_BANNER);
-        banners.add(Material.GREEN_BANNER);
-        banners.add(Material.LIME_BANNER);
-        banners.add(Material.CYAN_BANNER);
-        banners.add(Material.ORANGE_BANNER);
-        banners.add(Material.BROWN_BANNER);
-        banners.add(Material.GRAY_BANNER);
-        banners.add(Material.LIGHT_GRAY_BANNER);
-        banners.add(Material.PINK_BANNER);
-        banners.add(Material.PURPLE_BANNER);
-        banners.add(Material.MAGENTA_BANNER);
-        banners.add(Material.LIGHT_BLUE_BANNER);
     }
 
 
     public boolean setBanner(Material banner) {
-        if(banners.contains(banner)) {
-   //         this.banner = new ItemStack(banner);
-   //         this.banner.setItemMeta(bannerMeta);
+        if(ItemManager.isBanner(banner)) {
+            serialisedBanner = ItemDataConverter.encodeItemStackToBase64(new ItemStack(banner));
             updateBannerItem();
             return true;
         }
@@ -71,25 +50,27 @@ public class GuildBanner {
     }
 
     public boolean setBanner(ItemStack banner) {
-        if(banners.contains(banner.getType())) {
-   //         this.banner = banner;
-   //         this.bannerMeta = (BannerMeta) banner.getItemMeta();
+        if(ItemManager.isBanner(banner.getType())) {
+            serialisedBanner = ItemDataConverter.encodeItemStackToBase64(banner);
             updateBannerItem();
             return true;
         }
         return false;
     }
 
-  /*  public ItemStack getBannerItem() {
-        return this.banner;
+    public ItemStack getBannerItem() {
+        return ItemDataConverter.decodeItemStackFromBase64(serialisedBanner);
     }
-*/
+
     public void updateBannerItem() {
         String name = ChatColor.GOLD + "Guild Banner";
         String lore = ChatColor.GRAY + "A banner for a guild";
-    /*    bannerMeta.setDisplayName(name);
+
+        ItemStack banner = ItemDataConverter.decodeItemStackFromBase64(serialisedBanner);
+        BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
+        bannerMeta.setDisplayName(name);
         bannerMeta.setLore(Collections.singletonList(lore));
-        bannerMeta.setLocalizedName("guild_banner");
         banner.setItemMeta(bannerMeta);
-    */}
+        serialisedBanner = ItemDataConverter.encodeItemStackToBase64(banner);
+    }
 }
