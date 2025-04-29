@@ -14,7 +14,7 @@ dungeons,
 moving from YAML towards JSON file format
 
 # Author
-- [@XpKitty](https://www.github.com/XpKitty)
+- [@SF-24](https://www.github.com/SF-24)
 
 ## Documentation (unfinished)
 [Documentation](https://github.com/XpKitty/RpgPlugin/blob/master/docs/index.md)
