@@ -1,3 +1,8 @@
+# Archived.
+## Succeded by: https://github.com/SF-24/MineshaftApi and dependents <br>
+### (at time of writing: https://github.com/SF-24/MineshaftRpg and https://github.com/SF-24/MineshaftItemPort)
+<br><br>
+
 # AnotherRpgPlugin
 
 Minecraft java edition plugin. Made for spigot, compatible with spigot forks.
